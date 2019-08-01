@@ -1,0 +1,18 @@
+<div class="dr-div-title-info">
+    <div class="dr-div-title">
+        <h1 mat-dialog-title>Bienvenido!</h1>
+    </div>
+    <div class="dr-div-info">
+        <button mat-icon-button matTooltip="No se usara para envio de correos">
+                <i class="fas fa-info-circle"></i>
+        </button>
+    </div>
+</div>
+<div>
+    <div class="dr-center-info">
+        <h3>Ingresaste como</h3>
+        <span>{{data.suscriptor}}</span>
+        <mat-divider class="dr-divider-20"></mat-divider>
+        <div *ngIf="data.alert"><i matTooltip="Estas suscrito a notificaciones" class="fas fa-clipboard-check dr-check-alert"></i></div>
+    </div>
+</div>

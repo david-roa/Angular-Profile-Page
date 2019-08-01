@@ -1,0 +1,22 @@
+.dr-margin {
+    align-content: center;
+    align-items: center;
+    width: 100%
+}
+
+.dr-p-24 {
+    padding: 24px!important
+}
+
+.dr-p-24-botton-0 {
+    padding: 24px 24px 0 24px;
+}
+
+.dr-button-format {
+    display: flex;
+    place-content: center space-between;
+}
+
+.dr-full-width {
+    width: 100%;
+}

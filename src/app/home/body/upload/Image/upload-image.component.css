@@ -1,0 +1,85 @@
+.upload-button input {
+    display: none;
+}
+
+#uploadContainer {
+    border-style: dotted;
+}
+
+.dr-upload {
+    height: 100%;
+}
+
+.dr-upload-img {
+    height: 100%;
+    line-height: 5.5;
+    text-align: center;
+}
+
+.dr-center-img {
+    height: 50px;
+    width: 40px;
+    margin: auto;
+}
+
+.dr-center-preview {
+    text-align: center;
+}
+
+.dr-preview {
+    width: 110px;
+}
+
+.dr-spacer {
+    flex: 1 1 auto;
+}
+
+
+/* Animate loading Upoad */
+
+.loader2 {
+    border-top: 3px solid #ddd;
+    border-bottom: 3px solid #ddd;
+    border-radius: 50%;
+    height: 14px;
+    width: 15px;
+    margin: 10px;
+    position: absolute;
+    animation: loading 1.2s infinite linear;
+}
+
+.loader3 {
+    border-left: 3px solid #ccc;
+    border-right: 3px solid #ccc;
+    border-radius: 50%;
+    height: 24px;
+    width: 25px;
+    margin: 8px 2px;
+    position: absolute;
+    animation: loading 1s infinite linear;
+}
+
+.loader4 {
+    border-top: 3px solid #bbb;
+    border-bottom: 3px solid #bbb;
+    border-radius: 50%;
+    height: 34px;
+    width: 35px;
+    position: absolute;
+    animation: loading .8s infinite linear;
+}
+
+@keyframes loading {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(359deg);
+    }
+}
+
+@keyframes loadingText {
+    to {
+        text-shadow: 0 0 2px #9CF, 0 0 3px #9CF, 0 0 4px #69C, 0 0 5px #69C;
+    }
+}

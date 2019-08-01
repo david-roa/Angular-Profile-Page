@@ -1,0 +1,28 @@
+<div class="dr-div-title-info">
+    <div class="dr-div-title">
+        <h1 mat-dialog-title>Hola!</h1>
+    </div>
+    <div class="dr-div-info">
+        <button mat-icon-button matTooltip="No se enviaran correos">
+                <i class="fas fa-info-circle"></i>
+        </button>
+    </div>
+</div>
+<div mat-dialog-content>
+    <mat-horizontal-stepper linear #stepper>
+        <mat-step [stepControl]="emailGroup" errorMessage="El email es requerido!." class="dr-form-email">
+            <form [formGroup]="emailGroup">
+                <ng-template matStepLabel>Email</ng-template>
+                <mat-form-field>
+                    <input matInput [(ngModel)]="data.suscriptor" placeholder="Tu email" formControlName="suscriptor" required>
+                </mat-form-field>
+                <div class="dr-button-format">
+                    <button mat-button matStepperNext cdkFocusInitial>Siguiente</button>
+                </div>
+            </form>
+        </mat-step>
+        <mat-step>
+            <button mat-button [mat-dialog-close]="data.suscriptor">Enviar</button>
+        </mat-step>
+    </mat-horizontal-stepper>
+</div>

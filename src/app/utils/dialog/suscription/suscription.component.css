@@ -1,0 +1,28 @@
+.dr-div-info {
+    line-height: 2.3;
+    width: 20%;
+    text-align: right;
+}
+
+.dr-div-title {
+    width: 80%;
+}
+
+.dr-div-title-info {
+    display: flex
+}
+
+.dr-spacer {
+    flex: 1 1 auto;
+}
+
+.dr-button-format {
+    display: flex;
+    place-content: center space-between;
+}
+
+.dr-form-email {
+    padding-left: 0px;
+    padding-bottom: 0px;
+    padding-right: 0px;
+}

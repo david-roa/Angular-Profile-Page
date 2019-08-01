@@ -1,0 +1,173 @@
+.dr-container {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.dr-is-mobile .dr-toolbar {
+    position: fixed;
+    /* Make sure the toolbar will stay on top of the content as it scrolls past. */
+    z-index: 2;
+}
+
+.dr-sidenav {
+    border-color: rgb(30, 33, 41)
+}
+
+h1.dr-app-name {
+    margin-left: 8px;
+}
+
+.dr-sidenav-container {
+    /* When the sidenav is not fixed, stretch the sidenav container to fill the available space. This
+       causes `<mat-sidenav-content>` to act as our scrolling element for desktop layouts. */
+    flex: 1;
+}
+
+.dr-is-mobile .dr-sidenav-container {
+    /* When the sidenav is fixed, don't constrain the height of the sidenav container. This allows the
+       `<body>` to be our scrolling element for mobile layouts. */
+    flex: 1 0 auto;
+}
+
+.dr-spacer {
+    flex: 1 1 auto;
+}
+
+
+/* Icon Bob */
+
+@-webkit-keyframes dr-icon-bob {
+    0% {
+        -webkit-transform: translateY(-6px);
+        transform: translateY(-6px);
+    }
+    50% {
+        -webkit-transform: translateY(-2px);
+        transform: translateY(-2px);
+    }
+    100% {
+        -webkit-transform: translateY(-6px);
+        transform: translateY(-6px);
+    }
+}
+
+@keyframes dr-icon-bob {
+    0% {
+        -webkit-transform: translateY(-6px);
+        transform: translateY(-6px);
+    }
+    50% {
+        -webkit-transform: translateY(-2px);
+        transform: translateY(-2px);
+    }
+    100% {
+        -webkit-transform: translateY(-6px);
+        transform: translateY(-6px);
+    }
+}
+
+@-webkit-keyframes dr-icon-bob-float {
+    100% {
+        -webkit-transform: translateY(-6px);
+        transform: translateY(-6px);
+    }
+}
+
+@keyframes dr-icon-bob-float {
+    100% {
+        -webkit-transform: translateY(-6px);
+        transform: translateY(-6px);
+    }
+}
+
+.dr-icon-bob {
+    display: inline-block;
+    vertical-align: middle;
+    -webkit-transform: perspective(1px) translateZ(0);
+    transform: perspective(1px) translateZ(0);
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+}
+
+.dr-icon-bob .dr-icon {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+}
+
+.dr-icon-bob:hover .dr-icon,
+.dr-icon-bob:active .dr-icon {
+    -webkit-animation-name: dr-icon-bob-float, dr-icon-bob;
+    animation-name: dr-icon-bob-float, dr-icon-bob;
+    -webkit-animation-duration: .3s, 1.5s;
+    animation-duration: .3s, 1.5s;
+    -webkit-animation-delay: 0s, .3s;
+    animation-delay: 0s, .3s;
+    -webkit-animation-timing-function: ease-out, ease-in-out;
+    animation-timing-function: ease-out, ease-in-out;
+    -webkit-animation-iteration-count: 1, infinite;
+    animation-iteration-count: 1, infinite;
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+    -webkit-animation-direction: normal, alternate;
+    animation-direction: normal, alternate;
+}
+
+.dr-size-logo {
+    width: 50px;
+}
+
+.scrollbar {
+    float: left;
+    height: 90%;
+    width: 100%;
+    overflow-y: scroll;
+}
+
+@media(max-width: 800px) {
+    .scrollbar {
+        height: 88.5%;
+    }
+}
+
+@media(max-width: 500px) {
+    .scrollbar {
+        height: 90%;
+    }
+}
+
+@media(min-width: 1400px) {
+    .scrollbar {
+        height: 92%;
+    }
+}
+
+.force-overflow {
+    min-height: 450px;
+}
+
+
+/*
+ *  STYLE 1
+ */
+
+#style-1::-webkit-scrollbar-track {
+    scrollbar-shadow-color: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    background-color: #a7a7a74d;
+}
+
+#style-1::-webkit-scrollbar {
+    width: 12px;
+    background-color: #a7a7a74d;
+}
+
+#style-1::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    scrollbar-shadow-color: inset 0 0 6px rgba(0, 0, 0, .3);
+    background-color: #555;
+}

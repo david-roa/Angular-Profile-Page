@@ -1,0 +1,27 @@
+.dr-div-info {
+    line-height: 2.3;
+    width: 20%;
+    text-align: right;
+}
+
+.dr-div-title {
+    width: 80%;
+}
+
+.dr-div-title-info {
+    display: flex
+}
+
+.dr-center-info {
+    text-align: center;
+}
+
+.dr-check-alert {
+    font-size: 40px;
+}
+
+.dr-divider-20 {
+    border-top-width: 1px;
+    border-top-style: solid;
+    margin: 20px 0;
+}

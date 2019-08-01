@@ -1,0 +1,206 @@
+<mat-tab-group dynamicHeight mat-align-tabs="center" animationDuration="1000ms">
+    <mat-tab label="Publicaciones">
+        <div class="dr-post-body">
+            <div class="dr-post">
+                <div class="dr-add-post mat-elevation-z4">
+                    <div>
+                        <mat-card *ngIf="postTemp || images.length != 0 || extFiles.length != 0" color="dark-gray">
+                            <mat-card class="dr-card-post-preview">
+                                <mat-card-header>
+                                    <div mat-card-avatar class="dr-header-image-user"></div>
+                                    <mat-card-title>{{user}}</mat-card-title>
+                                    <mat-card-subtitle>{{date| date: 'longDate'}}</mat-card-subtitle>
+                                    <span class="dr-spacer"></span>
+                                    <button mat-icon-button (click)="deletePostTemp()"><mat-icon>delete_forever</mat-icon></button>
+                                </mat-card-header>
+                                <div mat-card-image [ngClass]="{'dr-card-preview': images.length != 0 }">
+                                    <slideshow *ngIf="images.length != 0" class="dr-slide-post" [arrowSize]="'30px'" [lazyLoad]="images.length > 1" [showCaptions]="true" [showDots]="true" [backgroundPosition]="'center center'" [backgroundSize]="'cover'" [autoPlay]="true" [showArrows]="true"
+                                        [imageUrls]="images" [autoPlayInterval]="'3333'"></slideshow>
+                                </div>
+                                <div class="dr-group-files">
+                                    <div *ngFor="let ext of extFiles; let i = index" class="dr-files-post">
+                                        <img mat-card-image matTooltip="{{namesFiles[i]}}" src="../../../assets/icons/pdf.png" class="dr-preview" *ngIf="ext === 'pdf'">
+                                        <img mat-card-image matTooltip="{{namesFiles[i]}}" src="../../../assets/icons/excel.png" class="dr-preview" *ngIf="ext === 'xlsx'">
+                                        <img mat-card-image matTooltip="{{namesFiles[i]}}" src="../../../assets/icons/ppt.png" class="dr-preview" *ngIf="ext === 'pptx'">
+                                        <img mat-card-image matTooltip="{{namesFiles[i]}}" src="../../../assets/icons/word.png" class="dr-preview" *ngIf="ext === 'docx'">
+                                        <img mat-card-image matTooltip="{{namesFiles[i]}}" src="../../../assets/icons/csv.png" class="dr-preview" *ngIf="ext === 'csv'">
+                                        <img mat-card-image matTooltip="{{namesFiles[i]}}" src="../../../assets/icons/zip.png" class="dr-preview" *ngIf="ext === 'zip'">
+                                        <img mat-card-image matTooltip="{{namesFiles[i]}}" src="../../../assets/icons/rar.png" class="dr-preview" *ngIf="ext === 'rar'">
+                                    </div>
+                                </div>
+                                <mat-card-content>
+                                    <div class="dr-text-tab" [froalaView]="postTemp"></div>
+                                </mat-card-content>
+                                <mat-card-actions>
+                                    <button mat-button>LIKE</button>
+                                    <button mat-button>SHARE</button>
+                                </mat-card-actions>
+                            </mat-card>
+                        </mat-card>
+                    </div>
+                    <mat-divider *ngIf="postTemp || images.length != 0 || extFiles.length != 0" class="dr-divider-10">
+                    </mat-divider>
+                    <textarea class="dr-froala-body" [froalaEditor]="options" [(froalaModel)]="postTemp"></textarea >
+                </div>
+                <mat-toolbar color="dark-gray" class="dr-toolbar-post">
+                    <div>
+                        <button mat-icon-button (click)="uploadImg()" [attr.disabled]="limitImg" class="dr-pulse-clear dr-icon-push"><i matTooltip="Has alcanzado el límite de Imagenes!" [matTooltipDisabled]="!limitImg" class="fas fa-camera dr-icon"></i></button>
+                        <button mat-icon-button (click)="uploadFile()" [attr.disabled]="limitFiles" class="dr-pulse-clear dr-icon-push"><i matTooltip="Has alcanzado el límite de Archivos!" [matTooltipDisabled]="!limitFiles"  class="fas fa-file-upload dr-icon"></i></button>
+                    </div>
+                    <span class="dr-spacer"></span>
+                    <button mat-raised-button (click)="createNewPost()" color="accent" class="dr-pulse-clear">Publicar</button>
+                </mat-toolbar>
+                <mat-divider class="dr-divider-30"></mat-divider>
+                <div class="dr-add-post mat-elevation-z4">
+                    <mat-card class="dr-card">
+                        <mat-card-header>
+                            <div mat-card-avatar class="dr-header-image"></div>
+                            <mat-card-title>David Roa</mat-card-title>
+                            <mat-card-subtitle>{{datePost | date: 'longDate'}}</mat-card-subtitle>
+                            <span class="dr-spacer"></span>
+                            <button mat-icon-button><mat-icon>more_vert</mat-icon></button>
+                        </mat-card-header>
+                        <img mat-card-image src="../../../assets/image/Fito-Paez-01.jpeg" alt="Fito Paez">
+                        <mat-card-content>
+                            <p>
+                                Rodolfo Páez, más conocido como Fito Páez ​​ es un cantautor, compositor, músico y director de cine argentino, integrante de la llamada trova rosarina, ​ y uno de los más importantes exponentes del rock argentino. Además de su carrera como músico ha incursionado
+                                como cineasta, ​ guionista y novelista.
+                            </p>
+                        </mat-card-content>
+                        <mat-card-actions>
+                            <button mat-button>LIKE</button>
+                            <button mat-button>SHARE</button>
+                        </mat-card-actions>
+
+                        <!--Acordeon-->
+                        <mat-accordion class="example-headers-align">
+                            <mat-expansion-panel hideToggle (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title [class.dr-icon-float-away]="panelOpenState" [class.dr-icon-sink-away]="!panelOpenState">
+                                        <i *ngIf="!panelOpenState" class="dr-icon fas fa-hand-point-down"></i>
+                                        <i *ngIf="panelOpenState" class="dr-icon fas fa-hand-point-up"></i>
+                                        <span class="dr-spam-coments">Comentarios</span>
+                                    </mat-panel-title>
+                                    <mat-panel-description>
+                                        <span class="dr-spacer"></span>
+                                        <mat-icon>account_circle</mat-icon>
+                                    </mat-panel-description>
+                                </mat-expansion-panel-header>
+                                <mat-nav-list class="dr-nav">
+                                    <a mat-list-item class="dr-item-lis">
+                                        <div class="scrollbar" id="style-1">
+                                            <p mat-line class="dr-user-post-public">DaVid Roa
+                                                <span class="dr-subline">{{datePost | date: 'longDate'}}</span>
+                                            </p>
+                                            <p mat-line class="dr-adjust-text">
+                                                <span class="dr-post-coment">Con más de 30 años de trayectoria solista, su obra musical está compuesta por 23 álbumes de estudio, 1 maxi sencillo, 4 álbumes en directo, 3 DVD, 12 álbumes recopilatorios</span>
+                                            </p>
+                                        </div>
+                                        <img mat-list-avatar src="../../../assets/image/david-logo-circle.png" alt="">
+                                    </a>
+
+                                    <a mat-list-item class="dr-item-lis">
+                                        <div class="scrollbar" id="style-1">
+                                            <p mat-line class="dr-user-post-public">DaVid Roa
+                                                <span class="dr-subline">{{date | date: 'longDate'}}</span>
+                                            </p>
+                                            <p mat-line class="dr-adjust-text">
+                                                <span class="dr-post-coment">Good!</span>
+                                            </p>
+                                        </div>
+                                        <img mat-list-avatar src="../../../assets/image/david-profile-photo.jpeg" alt="">
+                                    </a>
+                                </mat-nav-list>
+                                <div class="dr-post-body">
+                                    <div class="dr-post dr-user-coments">
+                                        <mat-card-header>
+                                            <div mat-card-avatar class="dr-header-image"></div>
+                                            <mat-card-title>David Roa</mat-card-title>
+                                            <mat-card-subtitle>{{date | date: 'longDate'}}</mat-card-subtitle>
+                                        </mat-card-header>
+                                    </div>
+                                    <div class="dr-timeline-post dr-user-message">
+                                        <textarea class="dr-textarea-dark dr-user-textarea" rows="2"></textarea>
+                    <button mat-raised-button color="accent" class="dr-pulse-clear">Publicar</button>
+                </div>
+            </div>
+            </mat-expansion-panel>
+            </mat-accordion>
+            </mat-card>
+        </div>
+        </div>
+        <div class="dr-timeline-post">
+            <div class="dr-publis-post mat-elevation-z4">
+                <mat-toolbar color="dark-gray" class="dr-toolbar-activity">
+                    <span>Actividad</span>
+                </mat-toolbar>
+                <mat-nav-list class="dr-nav">
+                    <a mat-list-item class="dr-pulse-dark dr-icon-buzz-out">
+                        <h1 mat-line class="dr-user-post-public">DaVid Roa
+                            <span class="dr-post-public">Publicaste en tu perfil</span>
+                        </h1>
+                        <p mat-line>
+                            <span class="dr-subline">{{datePost | date: 'longDate'}}</span>
+                        </p>
+                        <img mat-list-avatar src="../../../assets/image/david-profile-photo.jpeg" alt="">
+                    </a>
+
+                    <a mat-list-item class="dr-pulse-dark dr-icon-buzz-out">
+                        <h1 mat-line class="dr-user-post-public">DaVid Roa
+                            <span class="dr-post-public">Comentó tu post</span>
+                        </h1>
+                        <p mat-line>
+                            <span class="dr-subline">{{datePost | date: 'longDate'}}</span>
+                        </p>
+                        <img mat-list-avatar src="../../../assets/image/david-logo-circle.png" alt="">
+                    </a>
+
+                    <a mat-list-item class="dr-pulse-dark dr-icon-buzz-out">
+                        <h1 mat-line class="dr-user-post-public">DaVid Roa
+                            <span class="dr-post-public">Conmentaste tu post</span>
+                        </h1>
+                        <p mat-line>
+                            <span class="dr-subline">{{date | date: 'longDate'}}</span>
+                        </p>
+                        <img mat-list-avatar src="../../../assets/image/david-profile-photo.jpeg" alt="">
+                    </a>
+                </mat-nav-list>
+            </div>
+        </div>
+        </div>
+    </mat-tab>
+    <mat-tab label="Información">
+        <div class="dr-loading">
+            <div class="dr-small-box">
+                <br>
+                <br>
+                <span class="back">
+            <span>L</span>
+                <span>o</span>
+                <span>a</span>
+                <span>d</span>
+                <span>i</span>
+                <span>n</span>
+                <span>g</span>
+                </span>
+            </div>
+        </div>
+    </mat-tab>
+    <mat-tab label="Galeria">
+        <div class="dr-loading">
+            <div class="dr-small-box">
+                <br>
+                <br>
+                <span class="back">
+                    <span>L</span>
+                <span>o</span>
+                <span>a</span>
+                <span>d</span>
+                <span>i</span>
+                <span>n</span>
+                <span>g</span>
+                </span>
+            </div>
+        </div>
+    </mat-tab>
+</mat-tab-group>

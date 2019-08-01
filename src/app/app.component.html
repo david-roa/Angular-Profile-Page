@@ -1,0 +1,64 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<div class="dr-container">
+    <mat-sidenav-container class="dr-sidenav-container">
+        <mat-sidenav #snav [mode]="mobileQuery.matches ? 'over' : 'side'" class="dr-sidenav">
+            <mat-toolbar color="dark" class="dr-toolbar">
+                <img src="../assets/image/david-logo-primary.png" alt="david" class="dr-size-logo">
+                <h1 class="dr-app-name">David Roa</h1>
+                <span class="dr-spacer"></span>
+                <button mat-icon-button (click)="saveTestMessage()" class="dr-icon-bob"></button>
+            </mat-toolbar>
+            <mat-nav-list *ngIf="valueMenu">
+                <a mat-list-item routerLink="{{nav.nav}}" *ngFor="let nav of fillerNav">{{nav.name}}</a>
+            </mat-nav-list>
+            <mat-nav-list *ngIf="!valueMenu">
+                <a mat-list-item routerLink="{{nav.nav}}" (click)="snav.toggle()" *ngFor="let nav of fillerNav">{{nav.name}}</a>
+            </mat-nav-list>
+        </mat-sidenav>
+        <mat-toolbar color="primary" class="dr-toolbar">
+            <button mat-icon-button (click)="snav.toggle()" class="dr-icon-bob"><mat-icon class="dr-icon">menu</mat-icon></button>
+            <h1 class="dr-app-name">David Roa</h1>
+            <span class="dr-spacer"></span>
+            <button mat-icon-button *ngIf="suscriptor" (click)="infoUser()">
+                <mat-icon>how_to_reg</mat-icon>
+            </button>
+            <button mat-icon-button *ngIf="( message | async )?.data" (click)="openSnackBar()">
+                <mat-icon>speaker_phone</mat-icon>
+            </button>
+            <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="menu">
+                <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+                <button mat-menu-item *ngIf="!valueMenu" (click)="valueMenu=true">
+                    <mat-icon>screen_share</mat-icon>
+                    <span>Habilitar Menu</span>
+                </button>
+                <button mat-menu-item *ngIf="valueMenu" (click)="valueMenu=false">
+                    <mat-icon>stop_screen_share</mat-icon>
+                    <span>Desabilitar Menu</span>
+                </button>
+                <button mat-menu-item *ngIf="!valueAlert" (click)="subscribeToNotifications(true)" class="dr-push-btn">
+                    <mat-icon>notifications_active</mat-icon>
+                    <span>Habilitar Alertas</span>
+                </button>
+                <button mat-menu-item *ngIf="valueAlert" (click)="unsubscribeToNotification(false)">
+                    <mat-icon>notifications_off</mat-icon>
+                    <span>Desabilitar Alertas</span>
+                </button>
+                <button mat-menu-item *ngIf="valueAlert" (click)="sendNotificationTest()">
+                    <mat-icon>send</mat-icon>
+                    <span>Notificacion de Prueba</span>
+                </button>
+                <button mat-menu-item *ngIf="suscriptor === undefined" (click)="suscriptionUser()">
+                    <mat-icon>person_add</mat-icon>
+                    <span>Suscribete</span>
+                </button>
+            </mat-menu>
+        </mat-toolbar>
+        <div class="scrollbar" id="style-1">
+            <div class="force-overflow">
+                <router-outlet></router-outlet>
+            </div>
+        </div>
+    </mat-sidenav-container>
+</div>

@@ -1,0 +1,288 @@
+.dr-banner-div {
+    height: 320px;
+    min-height: 320px;
+    max-height: 320px;
+    background: url('../../../assets/image/david-logo-banner.png') 0 45%/cover no-repeat;
+}
+
+.dr-p-24 {
+    padding: 24px!important
+}
+
+.dr-div-banner {
+    box-sizing: border-box;
+    display: flex;
+    place-content: flex-end space-between;
+    align-items: flex-end;
+}
+
+.dr-div-profile {
+    display: flex;
+    align-items: center;
+}
+
+.dr-profile-photo {
+    border-radius: 50%;
+    width: 140px;
+    margin-right: 24px;
+}
+
+.dr-profile-name {
+    font-size: 34px;
+    color: #fff;
+}
+
+.dr-div-button-profile {
+    display: flex;
+}
+
+@media(max-width: 800px) {
+    .dr-div-banner {
+        display: block;
+        text-align: center
+    }
+    .dr-div-profile {
+        display: inline;
+    }
+    .dr-div-button-profile {
+        display: contents;
+    }
+    .dr-profile-photo {
+        margin-right: 0px;
+        margin-bottom: 10px
+    }
+}
+
+.dr-button-profile {
+    margin-right: 10px;
+    font-size: 40px;
+    width: 70px;
+    height: 70px;
+}
+
+@media(max-width: 185px) {
+    .dr-button-profile {
+        margin-right: 0px
+    }
+}
+
+.dr-i-m-7 {
+    margin-bottom: 7px;
+    color: #2196f3
+}
+
+.dr-i-m-10 {
+    margin-bottom: 10px;
+    color: #2196f3
+}
+
+
+/* Back Pulse Dark*/
+
+@-webkit-keyframes dr-back-pulse-dark {
+    50% {
+        background-color: rgb(230, 230, 230);
+    }
+}
+
+@keyframes dr-back-pulse-dark {
+    50% {
+        background-color: rgb(230, 230, 230);
+    }
+}
+
+.dr-back-pulse-dark {
+    display: inline-block;
+    vertical-align: middle;
+    -webkit-transform: perspective(1px) translateZ(0);
+    transform: perspective(1px) translateZ(0);
+    overflow: hidden;
+    -webkit-transition-duration: 1s;
+    transition-duration: 01s;
+    -webkit-transition-property: color, background-color;
+    transition-property: color, background-color;
+}
+
+.dr-back-pulse-dark:hover,
+.dr-back-pulse-dark:active {
+    -webkit-animation-name: dr-back-pulse-dark;
+    animation-name: dr-back-pulse-dark;
+    -webkit-animation-duration: 1.5s;
+    animation-duration: 1.5s;
+    -webkit-animation-delay: 1s;
+    animation-delay: 1s;
+    -webkit-animation-timing-function: linear;
+    animation-timing-function: linear;
+    -webkit-animation-iteration-count: infinite;
+    animation-iteration-count: infinite;
+    background-color: rgb(56, 56, 56);
+    background-color: rgb(56, 56, 56);
+    color: gray;
+}
+
+
+/* Icon Bob */
+
+@-webkit-keyframes dr-icon-bob {
+    0% {
+        -webkit-transform: translateY(-6px);
+        transform: translateY(-6px);
+    }
+    50% {
+        -webkit-transform: translateY(-2px);
+        transform: translateY(-2px);
+    }
+    100% {
+        -webkit-transform: translateY(-6px);
+        transform: translateY(-6px);
+    }
+}
+
+@keyframes dr-icon-bob {
+    0% {
+        -webkit-transform: translateY(-6px);
+        transform: translateY(-6px);
+    }
+    50% {
+        -webkit-transform: translateY(-2px);
+        transform: translateY(-2px);
+    }
+    100% {
+        -webkit-transform: translateY(-6px);
+        transform: translateY(-6px);
+    }
+}
+
+@-webkit-keyframes dr-icon-bob-float {
+    100% {
+        -webkit-transform: translateY(-6px);
+        transform: translateY(-6px);
+    }
+}
+
+@keyframes dr-icon-bob-float {
+    100% {
+        -webkit-transform: translateY(-6px);
+        transform: translateY(-6px);
+    }
+}
+
+.dr-icon-bob {
+    display: inline-block;
+    vertical-align: middle;
+    -webkit-transform: perspective(1px) translateZ(0);
+    transform: perspective(1px) translateZ(0);
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+}
+
+.dr-icon-bob .dr-icon {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+}
+
+.dr-icon-bob:hover .dr-icon,
+.dr-icon-bob:active .dr-icon {
+    -webkit-animation-name: dr-icon-bob-float, dr-icon-bob;
+    animation-name: dr-icon-bob-float, dr-icon-bob;
+    -webkit-animation-duration: .3s, 1.5s;
+    animation-duration: .3s, 1.5s;
+    -webkit-animation-delay: 0s, .3s;
+    animation-delay: 0s, .3s;
+    -webkit-animation-timing-function: ease-out, ease-in-out;
+    animation-timing-function: ease-out, ease-in-out;
+    -webkit-animation-iteration-count: 1, infinite;
+    animation-iteration-count: 1, infinite;
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+    -webkit-animation-direction: normal, alternate;
+    animation-direction: normal, alternate;
+}
+
+
+/* Icon Up */
+
+@-webkit-keyframes dr-icon-up {
+    0%,
+    50%,
+    100% {
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+    }
+    25%,
+    75% {
+        -webkit-transform: translateY(-6px);
+        transform: translateY(-6px);
+    }
+}
+
+@keyframes dr-icon-up {
+    0%,
+    50%,
+    100% {
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+    }
+    25%,
+    75% {
+        -webkit-transform: translateY(-6px);
+        transform: translateY(-6px);
+    }
+}
+
+.dr-icon-up {
+    display: inline-block;
+    vertical-align: middle;
+    -webkit-transform: perspective(1px) translateZ(0);
+    transform: perspective(1px) translateZ(0);
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+}
+
+.dr-icon-up .dr-icon {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+}
+
+.dr-icon-up:hover .dr-icon,
+.dr-icon-up:focus .dr-icon,
+.dr-icon-up:active .dr-icon {
+    -webkit-animation-name: dr-icon-up;
+    animation-name: dr-icon-up;
+    -webkit-animation-duration: 0.75s;
+    animation-duration: 0.75s;
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+}
+
+
+/* Icon Bounce */
+
+.dr-icon-bounce {
+    display: inline-block;
+    vertical-align: middle;
+    -webkit-transform: perspective(1px) translateZ(0);
+    transform: perspective(1px) translateZ(0);
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+}
+
+.dr-icon-bounce .dr-icon {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -webkit-transition-property: transform;
+    transition-property: transform;
+    -webkit-transition-timing-function: ease-out;
+    transition-timing-function: ease-out;
+}
+
+.dr-icon-bounce:hover .dr-icon,
+.dr-icon-bounce:focus .dr-icon,
+.dr-icon-bounce:active .dr-icon {
+    -webkit-transform: scale(1.5);
+    transform: scale(1.5);
+    -webkit-transition-timing-function: cubic-bezier(0.47, 2.02, 0.31, -0.36);
+    transition-timing-function: cubic-bezier(0.47, 2.02, 0.31, -0.36);
+}

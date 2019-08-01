@@ -1,0 +1,210 @@
+.example-container {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.example-is-mobile .example-toolbar {
+    position: fixed;
+    /* Make sure the toolbar will stay on top of the content as it scrolls past. */
+    z-index: 2;
+}
+
+.dr-sidenav {
+    border-color: rgb(30, 33, 41)
+}
+
+h1.example-app-name {
+    margin-left: 8px;
+}
+
+.example-sidenav-container {
+    /* When the sidenav is not fixed, stretch the sidenav container to fill the available space. This
+       causes `<mat-sidenav-content>` to act as our scrolling element for desktop layouts. */
+    flex: 1;
+}
+
+.example-is-mobile .example-sidenav-container {
+    /* When the sidenav is fixed, don't constrain the height of the sidenav container. This allows the
+       `<body>` to be our scrolling element for mobile layouts. */
+    flex: 1 0 auto;
+}
+
+.dr-spacer {
+    flex: 1 1 auto;
+}
+
+
+/* Back Pulse Clear*/
+
+@-webkit-keyframes dr-back-pulse-clear {
+    50% {
+        background-color: rgb(56, 56, 56);
+    }
+}
+
+@keyframes dr-back-pulse-clear {
+    50% {
+        background-color: rgb(56, 56, 56);
+    }
+}
+
+.dr-back-pulse-clear {
+    display: inline-block;
+    vertical-align: middle;
+    -webkit-transform: perspective(1px) translateZ(0);
+    transform: perspective(1px) translateZ(0);
+    overflow: hidden;
+    -webkit-transition-duration: 1s;
+    transition-duration: 01s;
+    -webkit-transition-property: color, background-color;
+    transition-property: color, background-color;
+}
+
+.dr-back-pulse-clear:hover,
+.dr-back-pulse-clear:active {
+    -webkit-animation-name: dr-back-pulse-clear;
+    animation-name: dr-back-pulse-clear;
+    -webkit-animation-duration: 1.5s;
+    animation-duration: 1.5s;
+    -webkit-animation-delay: 1s;
+    animation-delay: 1s;
+    -webkit-animation-timing-function: linear;
+    animation-timing-function: linear;
+    -webkit-animation-iteration-count: infinite;
+    animation-iteration-count: infinite;
+    background-color: rgb(230, 230, 230);
+    background-color: rgb(230, 230, 230);
+    color: gray;
+}
+
+
+/* Back Pulse Dark*/
+
+@-webkit-keyframes dr-back-pulse-dark {
+    50% {
+        background-color: rgb(230, 230, 230);
+    }
+}
+
+@keyframes dr-back-pulse-dark {
+    50% {
+        background-color: rgb(230, 230, 230);
+    }
+}
+
+.dr-back-pulse-dark {
+    display: inline-block;
+    vertical-align: middle;
+    -webkit-transform: perspective(1px) translateZ(0);
+    transform: perspective(1px) translateZ(0);
+    overflow: hidden;
+    -webkit-transition-duration: 1s;
+    transition-duration: 01s;
+    -webkit-transition-property: color, background-color;
+    transition-property: color, background-color;
+}
+
+.dr-back-pulse-dark:hover,
+.dr-back-pulse-dark:active {
+    -webkit-animation-name: dr-back-pulse-dark;
+    animation-name: dr-back-pulse-dark;
+    -webkit-animation-duration: 1.5s;
+    animation-duration: 1.5s;
+    -webkit-animation-delay: 1s;
+    animation-delay: 1s;
+    -webkit-animation-timing-function: linear;
+    animation-timing-function: linear;
+    -webkit-animation-iteration-count: infinite;
+    animation-iteration-count: infinite;
+    background-color: rgb(56, 56, 56);
+    background-color: rgb(56, 56, 56);
+    color: gray;
+}
+
+
+/* Icon Bob */
+
+@-webkit-keyframes dr-icon-bob {
+    0% {
+        -webkit-transform: translateY(-6px);
+        transform: translateY(-6px);
+    }
+    50% {
+        -webkit-transform: translateY(-2px);
+        transform: translateY(-2px);
+    }
+    100% {
+        -webkit-transform: translateY(-6px);
+        transform: translateY(-6px);
+    }
+}
+
+@keyframes dr-icon-bob {
+    0% {
+        -webkit-transform: translateY(-6px);
+        transform: translateY(-6px);
+    }
+    50% {
+        -webkit-transform: translateY(-2px);
+        transform: translateY(-2px);
+    }
+    100% {
+        -webkit-transform: translateY(-6px);
+        transform: translateY(-6px);
+    }
+}
+
+@-webkit-keyframes dr-icon-bob-float {
+    100% {
+        -webkit-transform: translateY(-6px);
+        transform: translateY(-6px);
+    }
+}
+
+@keyframes dr-icon-bob-float {
+    100% {
+        -webkit-transform: translateY(-6px);
+        transform: translateY(-6px);
+    }
+}
+
+.dr-icon-bob {
+    display: inline-block;
+    vertical-align: middle;
+    -webkit-transform: perspective(1px) translateZ(0);
+    transform: perspective(1px) translateZ(0);
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+}
+
+.dr-icon-bob .dr-icon {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+}
+
+.dr-icon-bob:hover .dr-icon,
+.dr-icon-bob:active .dr-icon {
+    -webkit-animation-name: dr-icon-bob-float, dr-icon-bob;
+    animation-name: dr-icon-bob-float, dr-icon-bob;
+    -webkit-animation-duration: .3s, 1.5s;
+    animation-duration: .3s, 1.5s;
+    -webkit-animation-delay: 0s, .3s;
+    animation-delay: 0s, .3s;
+    -webkit-animation-timing-function: ease-out, ease-in-out;
+    animation-timing-function: ease-out, ease-in-out;
+    -webkit-animation-iteration-count: 1, infinite;
+    animation-iteration-count: 1, infinite;
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+    -webkit-animation-direction: normal, alternate;
+    animation-direction: normal, alternate;
+}
+
+.dr-size-logo {
+    width: 50px;
+}

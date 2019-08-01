@@ -1,0 +1,36 @@
+<div *ngIf="!loadingFile && !file" class="dr-upload">
+    <div id="uploadContainer" class="dr-upload-img" ngFileDrop [options]="options" (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput" [ngClass]="{ 'is-drop-over': dragOver }" accept=".png,.jpg,.jpeg,.gif">
+        <div class="container text-center">
+            <br/> Arrastra o
+            <label class="upload-button pointer m-0">
+                <input type="file" ngFileSelect [options]="options" (uploadOutput)="onUploadOutput($event)"
+                    [uploadInput]="uploadInput" accept=".png,.jpg,.jpeg,.gif">
+                <b><i class="fas fa-upload"></i>&nbsp;selecciona</b>
+            </label> el archivo
+        </div>
+    </div>
+</div>
+<div *ngIf="file">
+    <div class="dr-center-img">
+        <div class="loader2"></div>
+        <div class="loader3"></div>
+        <div class="loader4"></div>
+    </div>
+    <div class="dr-center-preview">
+        <mat-card>
+            <img [src]="imgURL" class="dr-preview" *ngIf="imgURL">
+        </mat-card>
+        <mat-toolbar color="dark-gray">
+            <button mat-raised-button color="warn" (click)="removeCertificate()">Borrar
+                <i class="fas fa-times-circle"></i>
+            </button>
+            <span class="dr-spacer"></span>
+            <button mat-raised-button color="primary" [mat-dialog-close]="data.file">Cargar
+                <i class="fas fa-arrow-circle-up"></i>
+            </button>
+        </mat-toolbar>
+    </div>
+</div>
+<div *ngIf="loadingFile">
+    hola
+</div>

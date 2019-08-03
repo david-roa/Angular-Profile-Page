@@ -259,6 +259,10 @@
     box-shadow: 5px 5px 2px 1px rgba(0, 0, 0, .2), 5px 5px 5px 5px rgba(0, 0, 0, .14), 3px 5px 5px 3px rgba(0, 0, 0, .12)!important;
 }
 
+.dr-dix-texarea-body {
+    white-space: pre
+}
+
 
 /* Froala */
 

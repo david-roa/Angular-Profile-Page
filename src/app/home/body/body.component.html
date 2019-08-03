@@ -4,7 +4,7 @@
             <div class="dr-post">
                 <div class="dr-add-post mat-elevation-z4">
                     <div>
-                        <mat-card *ngIf="postTemp || images.length != 0 || extFiles.length != 0" color="dark-gray">
+                        <mat-card *ngIf="postTemp && postTemp != '-' || images.length != 0 || extFiles.length != 0" color="dark-gray">
                             <mat-card class="dr-card-post-preview">
                                 <mat-card-header>
                                     <div mat-card-avatar class="dr-header-image-user"></div>
@@ -29,7 +29,7 @@
                                     </div>
                                 </div>
                                 <mat-card-content>
-                                    <div class="dr-text-tab" [froalaView]="postTemp"></div>
+                                    <div class="dr-dix-texarea-body" [ngClass]="{'dr-text-tab': !viewFroala}" [froalaView]="postTemp"></div>
                                 </mat-card-content>
                                 <mat-card-actions>
                                     <button mat-button>LIKE</button>
@@ -38,33 +38,51 @@
                             </mat-card>
                         </mat-card>
                     </div>
-                    <mat-divider *ngIf="postTemp || images.length != 0 || extFiles.length != 0" class="dr-divider-10">
+                    <mat-divider *ngIf="postTemp && postTemp != '-' || images.length != 0 || extFiles.length != 0" class="dr-divider-10">
                     </mat-divider>
-                    <textarea class="dr-froala-body" [froalaEditor]="options" [(froalaModel)]="postTemp"></textarea >
+                    <textarea *ngIf="viewFroala" [ngClass]="{'dr-froala-body': viewFroala}" [froalaEditor]="options" [(froalaModel)]="postTemp"></textarea >
+                    <textarea placeholder="Edita tu Post!" *ngIf="!viewFroala" [ngClass]="{'dr-textarea-dark': !viewFroala}" [(ngModel)]="postTemp" rows="5"></textarea >
+                    <mat-toolbar color="dark-gray" class="dr-toolbar-post">
+                        <div>
+                            <button mat-icon-button (click)="uploadImg()" [attr.disabled]="limitImg" class="dr-pulse-clear dr-icon-push"><i matTooltip="Has alcanzado el límite de Imagenes!" [matTooltipDisabled]="!limitImg" class="fas fa-camera dr-icon"></i></button>
+                            <button mat-icon-button (click)="uploadFile()" [attr.disabled]="limitFiles" class="dr-pulse-clear dr-icon-push"><i matTooltip="Has alcanzado el límite de Archivos!" [matTooltipDisabled]="!limitFiles"  class="fas fa-file-upload dr-icon"></i></button>
+                            <button mat-button (click)="showFroala()" *ngIf="postTemp" color="primary">{{nameEditor}}</button>
+                        </div>
+                        <span class="dr-spacer"></span>
+                        <button mat-raised-button (click)="createNewPost()" color="accent" [disabled]="user == 'user'" class="dr-pulse-clear"><span matTooltip="Suscribete para publicar contenidos" [matTooltipDisabled]="user != 'user'">Publicar</span></button>
+                    </mat-toolbar>
                 </div>
-                <mat-toolbar color="dark-gray" class="dr-toolbar-post">
-                    <div>
-                        <button mat-icon-button (click)="uploadImg()" [attr.disabled]="limitImg" class="dr-pulse-clear dr-icon-push"><i matTooltip="Has alcanzado el límite de Imagenes!" [matTooltipDisabled]="!limitImg" class="fas fa-camera dr-icon"></i></button>
-                        <button mat-icon-button (click)="uploadFile()" [attr.disabled]="limitFiles" class="dr-pulse-clear dr-icon-push"><i matTooltip="Has alcanzado el límite de Archivos!" [matTooltipDisabled]="!limitFiles"  class="fas fa-file-upload dr-icon"></i></button>
-                    </div>
-                    <span class="dr-spacer"></span>
-                    <button mat-raised-button (click)="createNewPost()" color="accent" class="dr-pulse-clear">Publicar</button>
-                </mat-toolbar>
-                <mat-divider class="dr-divider-30"></mat-divider>
-                <div class="dr-add-post mat-elevation-z4">
+                
+                
+                <div *ngFor="let post of listPosts[0], let i = index">
+                    <mat-divider class="dr-divider-30"></mat-divider>
                     <mat-card class="dr-card">
                         <mat-card-header>
-                            <div mat-card-avatar class="dr-header-image"></div>
-                            <mat-card-title>David Roa</mat-card-title>
-                            <mat-card-subtitle>{{datePost | date: 'longDate'}}</mat-card-subtitle>
+                            <div mat-card-avatar [ngClass]="{'dr-header-image': post.user == 'David Roa', 'dr-header-image-user': post.user != 'David Roa'}"></div>
+                            <mat-card-title>{{post.user}}</mat-card-title>
+                            <mat-card-subtitle>{{post.date | date: 'longDate'}}</mat-card-subtitle>
                             <span class="dr-spacer"></span>
                             <button mat-icon-button><mat-icon>more_vert</mat-icon></button>
                         </mat-card-header>
-                        <img mat-card-image src="../../../assets/image/Fito-Paez-01.jpeg" alt="Fito Paez">
+                        <div mat-card-image *ngIf="post.images" [ngClass]="{'dr-card-preview': post.images.length != 0 }">
+                            <slideshow *ngIf="post.images.length != 0" class="dr-slide-post" [arrowSize]="'30px'" [lazyLoad]="post.images.length > 1" [showCaptions]="true" [showDots]="true" [backgroundPosition]="'center center'" [backgroundSize]="'cover'" [autoPlay]="true" [showArrows]="true"
+                                [imageUrls]="post.images" [autoPlayInterval]="'3333'"></slideshow>
+                        </div>
+                        <div *ngIf="post.urlsFiles" class="dr-group-files">
+                            <div *ngFor="let url of post.urlsFiles; let i = index">
+                                <img mat-card-image matTooltip="{{post.namesFiles[i]}}" src="../../../assets/icons/pdf.png" class="dr-preview" *ngIf="post.extFiles[i] === 'pdf'">
+                                <img mat-card-image matTooltip="{{post.namesFiles[i]}}" src="../../../assets/icons/excel.png" class="dr-preview" *ngIf="post.extFiles[i] === 'xlsx'">
+                                <img mat-card-image matTooltip="{{post.namesFiles[i]}}" src="../../../assets/icons/ppt.png" class="dr-preview" *ngIf="post.extFiles[i] === 'pptx'">
+                                <img mat-card-image matTooltip="{{post.namesFiles[i]}}" src="../../../assets/icons/word.png" class="dr-preview" *ngIf="post.extFiles[i] === 'docx'">
+                                <img mat-card-image matTooltip="{{post.namesFiles[i]}}" src="../../../assets/icons/csv.png" class="dr-preview" *ngIf="post.extFiles[i] === 'csv'">
+                                <img mat-card-image matTooltip="{{post.namesFiles[i]}}" src="../../../assets/icons/zip.png" class="dr-preview" *ngIf="post.extFiles[i] === 'zip'">
+                                <img mat-card-image matTooltip="{{post.namesFiles[i]}}" src="../../../assets/icons/rar.png" class="dr-preview" *ngIf="post.extFiles[i] === 'rar'">
+                                <a mat-icon-button [href]="url"><i class="fas fa-file-download"></i></a>
+                            </div>
+                        </div>
                         <mat-card-content>
                             <p>
-                                Rodolfo Páez, más conocido como Fito Páez ​​ es un cantautor, compositor, músico y director de cine argentino, integrante de la llamada trova rosarina, ​ y uno de los más importantes exponentes del rock argentino. Además de su carrera como músico ha incursionado
-                                como cineasta, ​ guionista y novelista.
+                                {{post.text}}
                             </p>
                         </mat-card-content>
                         <mat-card-actions>

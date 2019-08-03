@@ -12,34 +12,7 @@ import FroalaEditor from 'froala-editor';
   styleUrls: ['./body.component.css'],
 })
 export class BodyComponent implements OnInit {
-  public options: Object = {
-    placeholderText: 'Edita tu Post!',
-    immediateAngularModelUpdate: true,
-    charCounterCount: true,
-    theme: 'dark',
-    language: 'es',
-    toolbarButtons: {
-      'moreText': {
-        'buttons': ['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', 'textColor', 'backgroundColor', 'inlineClass', 'inlineStyle', 'paragraphStyle', 'lineHeight', 'clearFormatting'],
-        'buttonsVisible': 1
-      },
-      'moreParagraph': {
-        'buttons': ['align', 'formatOL', 'formatUL', 'paragraphFormat', 'paragraphStyle', 'lineHeight', 'outdent', 'indent', 'quote'],
-        'buttonsVisible': 1
-      },
-      'moreRich': {
-        'buttons': ['insertLink', 'insertTable', 'emoticons', 'fontAwesome', 'specialCharacters', 'embedly', 'insertHR'],
-        'buttonsVisible': 1
-      },
-      'moreMisc': {
-        'buttons': ['undo', 'redo', 'fullscreen', 'print', 'getPDF', 'spellChecker', 'selectAll', 'html', 'clear', 'help'],
-        'align': 'right',
-        'buttonsVisible': 2
-      }
-    },
-    iconsTemplate: 'font_awesome_5',
-    quickInsertButtons: ['table', 'ol', 'ul']
-  }
+  public options: Object = {}
 
   panelOpenState = false;
   date = new Date();
@@ -56,6 +29,9 @@ export class BodyComponent implements OnInit {
   user: string;
   idNewPost: number;
   imgProfile: string = '../../../assets/image/user.gif';
+  viewFroala: boolean = true;
+  nameEditor: string = '';
+  listPosts = []
 
   constructor(public dialog: MatDialog,
     private sharedService: SharedService,
@@ -63,12 +39,14 @@ export class BodyComponent implements OnInit {
     this.file = new File(new Array<Blob>(), "Mock");
     this.idNewPost = new Date().getTime();
     this.initFroala();
+    this.showFroala();
+    this.getPosts();
   }
+
   ngOnInit() {
     this.sharedService.suscriptor.subscribe((val) => {
       this.user = val.split('@')[0];
     })
-    this.date = new Date();
   }
 
   uploadImg() {
@@ -122,16 +100,19 @@ export class BodyComponent implements OnInit {
 
   createNewPost() {
     var newPost = {
+      id: this.idNewPost,
       imgProfile: this.imgProfile,
       user: this.user.split('@')[0],
       date: this.date,
       text: this.postTemp,
       images: this.images,
+      extFiles: this.extFiles,
       namesFiles: this.namesFiles,
       urlsFiles: this.urlFiles,
       coments: []
     }
     this.messagingService.saveNewPost(newPost, this.idNewPost).then(() => {
+      this.listPosts[0].push(newPost);
       this.limitImg = null;
       this.limitFiles = null;
       this.images = [];
@@ -139,7 +120,7 @@ export class BodyComponent implements OnInit {
       this.namesFiles = [];
       this.extFiles = [];
       this.urlFiles = [];
-      this.postTemp = null;
+      this.postTemp = null;      
     })
   }
   initFroala() {
@@ -154,5 +135,51 @@ export class BodyComponent implements OnInit {
         this.events.focus();
       }
     });
+  }
+
+  showFroala() {
+    this.postTemp = "-";
+    this.viewFroala = !this.viewFroala;
+    if (this.viewFroala){
+      this.nameEditor = 'Editor Clasico!'
+      this.options = {
+        placeholderText: 'Edita tu Post!',
+        immediateAngularModelUpdate: true,
+        charCounterCount: true,
+        theme: 'dark',
+        language: 'es',
+        toolbarButtons: {
+          'moreText': {
+            'buttons': ['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', 'textColor', 'backgroundColor', 'inlineClass', 'inlineStyle', 'paragraphStyle', 'lineHeight', 'clearFormatting'],
+            'buttonsVisible': 1
+          },
+          'moreParagraph': {
+            'buttons': ['align', 'formatOL', 'formatUL', 'paragraphFormat', 'paragraphStyle', 'lineHeight', 'outdent', 'indent', 'quote'],
+            'buttonsVisible': 1
+          },
+          'moreRich': {
+            'buttons': ['insertLink', 'insertTable', 'emoticons', 'fontAwesome', 'specialCharacters', 'embedly', 'insertHR'],
+            'buttonsVisible': 1
+          },
+          'moreMisc': {
+            'buttons': ['undo', 'redo', 'fullscreen', 'print', 'getPDF', 'spellChecker', 'selectAll', 'html', 'clear', 'help'],
+            'align': 'right',
+            'buttonsVisible': 2
+          }
+        },
+        iconsTemplate: 'font_awesome_5',
+        quickInsertButtons: ['table', 'ol', 'ul']
+      };
+    } else{
+      this.nameEditor = 'Editor Froala!';
+      this.options = {placeholderText: ''}
+    }
+  }
+
+  getPosts(){
+    this.messagingService.getPosts().then((val) =>{
+      this.listPosts.push(val);
+    });
+    console.log(this.listPosts)
   }
 }

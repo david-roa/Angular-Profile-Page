@@ -297,6 +297,18 @@ export class FirebaseService {
   }
 
   /**
+    * get Post DB
+    */
+   getPosts() {
+    return new Promise<any>(async (resolve, reject) => {
+      this.db.list('public/post').valueChanges()
+        .subscribe((val) => {
+          resolve(val)
+        })
+    });
+  }
+
+  /**
     * get Token DB
     */
   saveSuscriptor(suscriptor) {

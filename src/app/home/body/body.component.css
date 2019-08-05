@@ -76,6 +76,11 @@
     color: #f2f2f2;
 }
 
+.dr-user-post-comment {
+    margin-bottom: 0px;
+    color: #f2f2f2;
+}
+
 .dr-user-post-public {
     margin-bottom: 0px;
     color: #2196f3;
@@ -137,6 +142,10 @@
     white-space: normal!important;
     overflow: initial!important;
     text-align: justify;
+}
+
+.dr-date-comment {
+    margin-top: 0px;
 }
 
 .dr-item-lis {
@@ -229,10 +238,6 @@
     margin-bottom: 5px;
 }
 
-.dr-files-post {
-    width: 60px;
-}
-
 .dr-group-files {
     display: flex;
 }
@@ -260,7 +265,15 @@
 }
 
 .dr-dix-texarea-body {
-    white-space: pre
+    white-space: pre-wrap
+}
+
+.dr-button-rigth {
+    float: right;
+}
+
+.dr-color-red-dark {
+    color: #5f0808;
 }
 
 

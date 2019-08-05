@@ -4,6 +4,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { FirebaseService } from './services/firebase/firebase.service';
 import { SharedService } from './services/shared/shared-service.service';
+import { AuthService } from './services/app/auth/auth.service';
+import { TokenService } from './services/app/auth/token.service';
+import { take } from 'rxjs/operators';
+import { AngularFireAuth } from '@angular/fire/auth';
 import { Suscription } from './utils/dialog/suscription/suscription.component';
 import { InfoUser } from './utils/dialog/info-user/info-user.component';
 
@@ -11,10 +15,11 @@ import { InfoUser } from './utils/dialog/info-user/info-user.component';
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  providers:[SharedService]
+  providers: [SharedService, TokenService]
 })
 export class AppComponent implements OnDestroy {
   mobileQuery: MediaQueryList;
+  pcQuery: MediaQueryList;
   public fillerNav: Array<object> = [
     {
       nav: '/home',
@@ -25,10 +30,11 @@ export class AppComponent implements OnDestroy {
       name: 'Próximamente "work"'
     }
   ];
+  type: string;
   valueMenu: boolean = true;
   valueAlert: boolean;
   message;
-  suscriptor: string;
+  suscriptor: string = '';
   data = {
     title: 'Notificación',
     body: 'Prueba Exitosa de Envio',
@@ -44,12 +50,18 @@ export class AppComponent implements OnDestroy {
     media: MediaMatcher,
     private messagingService: FirebaseService,
     private sharedService: SharedService,
+    private as: AuthService,
+    private af: AngularFireAuth,
+    private ts: TokenService,
     private _snackBar: MatSnackBar,
-    public dialog: MatDialog) {
+    public dialog: MatDialog
+  ) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
+    this.pcQuery = media.matchMedia('(min-width: 1000px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
-    this.messagingService.getTokenDB().then((val) => this.valueAlert = val === null ? false : true)
+    this.ts.getTokenDB().then((val) => this.valueAlert = val === null ? false : true)
+    this.type = this.pcQuery.matches ? 'PC' : null;
   }
 
   ngOnDestroy(): void {
@@ -61,18 +73,26 @@ export class AppComponent implements OnDestroy {
   }
 
   ngOnInit() {
-    this.messagingService.receiveMessage()
-    this.message = this.messagingService.currentMessage;
+    this.af.authState.pipe(take(1)).subscribe(async (user) => {
+      if (user) {
+        this.suscriptor = user.email;
+        this.sharedSuscriptor();
+      }
+    });
+    this.ts.receiveMessage()
+    this.message = this.ts.currentMessage;
+    if (this.type == null)
+      this.type = this.mobileQuery.matches ? 'MOBILE' : 'TABLET'
   }
 
   subscribeToNotifications(val) {
     this.valueAlert = val;
-    this.messagingService.requestPermission(this.suscriptor);
+    this.ts.requestPermission(this.type);
   }
 
   unsubscribeToNotification(val) {
     this.valueAlert = val;
-    this.messagingService.deletePermission();
+    this.ts.deletePermission();
   }
 
   sendNotificationTest() {
@@ -99,12 +119,22 @@ export class AppComponent implements OnDestroy {
 
   suscriptionUser() {
     const dialogRef = this.dialog.open(Suscription, {
-      width: '250px',
-      data: { suscriptor: this.suscriptor }
+      width: '320px', height: '680px',
+      data: { type: this.type }
     });
     dialogRef.afterClosed().subscribe(result => {
-      this.suscriptor = result;
-      this.messagingService.saveSuscriptor(this.suscriptor);
+      this.af.authState.pipe(take(1)).subscribe(async (user) => {
+        if (user) {
+          this.suscriptor = user.email;
+          this.sharedSuscriptor();
+        }
+      })
+    });
+  }
+
+  logout() {
+    this.as.logoutUser().then(res => {
+      this.suscriptor = '';
       this.sharedSuscriptor();
     });
   }

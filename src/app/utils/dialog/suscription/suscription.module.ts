@@ -11,8 +11,20 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatStepperModule } from '@angular/material/stepper';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+import { SharedService } from '../../../services/shared/shared-service.service';
+
+import { AngularFireMessagingModule } from '@angular/fire/messaging';
+import { AngularFireDatabaseModule } from '@angular/fire/database';
+import { AngularFireAuthModule } from '@angular/fire/auth';
+import { AngularFireModule } from '@angular/fire';
+import { environment } from 'src/environments/environment';
+import { Registry } from '../registry/registry.component'
+
 @NgModule({
-  declarations: [Suscription],
+  declarations: [
+    Suscription,
+    Registry
+  ],
   imports: [
     CommonModule,
     MatDialogModule,
@@ -23,11 +35,25 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MatFormFieldModule,
     FormsModule, 
     MatInputModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    /**
+     * firebase
+     */
+    AngularFireDatabaseModule,
+    AngularFireAuthModule,
+    AngularFireMessagingModule,
+    AngularFireModule.initializeApp(environment.firebase),
   ],
   exports: [
-    Suscription
+    Suscription,
+    Registry
   ],
-  bootstrap: [Suscription]
+  providers: [ 
+    SharedService
+  ],
+  bootstrap: [
+    Suscription,
+    Registry
+  ]
 })
 export class SuscriptionModule { }

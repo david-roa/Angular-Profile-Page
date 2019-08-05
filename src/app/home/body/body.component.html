@@ -4,7 +4,7 @@
             <div class="dr-post">
                 <div class="dr-add-post mat-elevation-z4">
                     <div>
-                        <mat-card *ngIf="postTemp && postTemp != '-' || images.length != 0 || extFiles.length != 0" color="dark-gray">
+                        <mat-card *ngIf="postTemp && postTemp != '-' || images.length != 0 || attachments.length != 0" color="dark-gray">
                             <mat-card class="dr-card-post-preview">
                                 <mat-card-header>
                                     <div mat-card-avatar class="dr-header-image-user"></div>
@@ -18,43 +18,40 @@
                                         [imageUrls]="images" [autoPlayInterval]="'3333'"></slideshow>
                                 </div>
                                 <div class="dr-group-files">
-                                    <div *ngFor="let ext of extFiles; let i = index" class="dr-files-post">
-                                        <img mat-card-image matTooltip="{{namesFiles[i]}}" src="../../../assets/icons/pdf.png" class="dr-preview" *ngIf="ext === 'pdf'">
-                                        <img mat-card-image matTooltip="{{namesFiles[i]}}" src="../../../assets/icons/excel.png" class="dr-preview" *ngIf="ext === 'xlsx'">
-                                        <img mat-card-image matTooltip="{{namesFiles[i]}}" src="../../../assets/icons/ppt.png" class="dr-preview" *ngIf="ext === 'pptx'">
-                                        <img mat-card-image matTooltip="{{namesFiles[i]}}" src="../../../assets/icons/word.png" class="dr-preview" *ngIf="ext === 'docx'">
-                                        <img mat-card-image matTooltip="{{namesFiles[i]}}" src="../../../assets/icons/csv.png" class="dr-preview" *ngIf="ext === 'csv'">
-                                        <img mat-card-image matTooltip="{{namesFiles[i]}}" src="../../../assets/icons/zip.png" class="dr-preview" *ngIf="ext === 'zip'">
-                                        <img mat-card-image matTooltip="{{namesFiles[i]}}" src="../../../assets/icons/rar.png" class="dr-preview" *ngIf="ext === 'rar'">
+                                    <div *ngFor="let attached of attachments; let i = index">
+                                        <img mat-card-image matTooltip="{{attached.name}}" src="../../../assets/icons/pdf.png" class="dr-preview" *ngIf="attached.ext === 'pdf'">
+                                        <img mat-card-image matTooltip="{{attached.name}}" src="../../../assets/icons/excel.png" class="dr-preview" *ngIf="attached.ext === 'xlsx'">
+                                        <img mat-card-image matTooltip="{{attached.name}}" src="../../../assets/icons/ppt.png" class="dr-preview" *ngIf="attached.ext === 'pptx'">
+                                        <img mat-card-image matTooltip="{{attached.name}}" src="../../../assets/icons/word.png" class="dr-preview" *ngIf="attached.ext === 'docx'">
+                                        <img mat-card-image matTooltip="{{attached.name}}" src="../../../assets/icons/csv.png" class="dr-preview" *ngIf="attached.ext === 'csv'">
+                                        <img mat-card-image matTooltip="{{attached.name}}" src="../../../assets/icons/zip.png" class="dr-preview" *ngIf="attached.ext === 'zip'">
+                                        <img mat-card-image matTooltip="{{attached.name}}" src="../../../assets/icons/rar.png" class="dr-preview" *ngIf="attached.ext === 'rar'">
+                                        <a mat-icon-button (click)="deleteAtt(attached.url,i)"><i class="fas fa-minus-circle dr-color-red-dark"></i></a>
                                     </div>
                                 </div>
                                 <mat-card-content>
-                                    <div class="dr-dix-texarea-body" [ngClass]="{'dr-text-tab': !viewFroala}" [froalaView]="postTemp"></div>
+                                    <div *ngIf="postTemp" class="dr-dix-texarea-body" [ngClass]="{'dr-text-tab': !viewFroala}" [froalaView]="postTemp"></div>
                                 </mat-card-content>
-                                <mat-card-actions>
-                                    <button mat-button>LIKE</button>
-                                    <button mat-button>SHARE</button>
-                                </mat-card-actions>
                             </mat-card>
                         </mat-card>
                     </div>
-                    <mat-divider *ngIf="postTemp && postTemp != '-' || images.length != 0 || extFiles.length != 0" class="dr-divider-10">
+                    <mat-divider *ngIf="postTemp && postTemp != '-' || images.length != 0 || attachments.length != 0" class="dr-divider-10">
                     </mat-divider>
                     <textarea *ngIf="viewFroala" [ngClass]="{'dr-froala-body': viewFroala}" [froalaEditor]="options" [(froalaModel)]="postTemp"></textarea >
                     <textarea placeholder="Edita tu Post!" *ngIf="!viewFroala" [ngClass]="{'dr-textarea-dark': !viewFroala}" [(ngModel)]="postTemp" rows="5"></textarea >
                     <mat-toolbar color="dark-gray" class="dr-toolbar-post">
                         <div>
-                            <button mat-icon-button (click)="uploadImg()" [attr.disabled]="limitImg" class="dr-pulse-clear dr-icon-push"><i matTooltip="Has alcanzado el límite de Imagenes!" [matTooltipDisabled]="!limitImg" class="fas fa-camera dr-icon"></i></button>
-                            <button mat-icon-button (click)="uploadFile()" [attr.disabled]="limitFiles" class="dr-pulse-clear dr-icon-push"><i matTooltip="Has alcanzado el límite de Archivos!" [matTooltipDisabled]="!limitFiles"  class="fas fa-file-upload dr-icon"></i></button>
+                            <button mat-icon-button (click)="uploadImg()" [disabled]="limitImg" class="dr-pulse-clear dr-icon-push"><i matTooltip="Has alcanzado el límite de Imagenes!" [matTooltipDisabled]="!limitImg" class="fas fa-camera dr-icon"></i></button>
+                            <button mat-icon-button (click)="uploadFile()" [disabled]="limitFiles" class="dr-pulse-clear dr-icon-push"><i matTooltip="Has alcanzado el límite de Archivos!" [matTooltipDisabled]="!limitFiles"  class="fas fa-file-upload dr-icon"></i></button>
                             <button mat-button (click)="showFroala()" *ngIf="postTemp" color="primary">{{nameEditor}}</button>
                         </div>
                         <span class="dr-spacer"></span>
-                        <button mat-raised-button (click)="createNewPost()" color="accent" [disabled]="user == 'user'" class="dr-pulse-clear"><span matTooltip="Suscribete para publicar contenidos" [matTooltipDisabled]="user != 'user'">Publicar</span></button>
+                        <button mat-raised-button (click)="createNewPost()" color="accent" [disabled]="user == ''" class="dr-pulse-clear"><span matTooltip="Suscribete para publicar contenidos" [matTooltipDisabled]="user != ''">Publicar</span></button>
                     </mat-toolbar>
                 </div>
                 
                 
-                <div *ngFor="let post of listPosts[0], let i = index">
+                <div *ngFor="let post of posts, let i = index">
                     <mat-divider class="dr-divider-30"></mat-divider>
                     <mat-card class="dr-card">
                         <mat-card-header>
@@ -68,26 +65,25 @@
                             <slideshow *ngIf="post.images.length != 0" class="dr-slide-post" [arrowSize]="'30px'" [lazyLoad]="post.images.length > 1" [showCaptions]="true" [showDots]="true" [backgroundPosition]="'center center'" [backgroundSize]="'cover'" [autoPlay]="true" [showArrows]="true"
                                 [imageUrls]="post.images" [autoPlayInterval]="'3333'"></slideshow>
                         </div>
-                        <div *ngIf="post.urlsFiles" class="dr-group-files">
-                            <div *ngFor="let url of post.urlsFiles; let i = index">
-                                <img mat-card-image matTooltip="{{post.namesFiles[i]}}" src="../../../assets/icons/pdf.png" class="dr-preview" *ngIf="post.extFiles[i] === 'pdf'">
-                                <img mat-card-image matTooltip="{{post.namesFiles[i]}}" src="../../../assets/icons/excel.png" class="dr-preview" *ngIf="post.extFiles[i] === 'xlsx'">
-                                <img mat-card-image matTooltip="{{post.namesFiles[i]}}" src="../../../assets/icons/ppt.png" class="dr-preview" *ngIf="post.extFiles[i] === 'pptx'">
-                                <img mat-card-image matTooltip="{{post.namesFiles[i]}}" src="../../../assets/icons/word.png" class="dr-preview" *ngIf="post.extFiles[i] === 'docx'">
-                                <img mat-card-image matTooltip="{{post.namesFiles[i]}}" src="../../../assets/icons/csv.png" class="dr-preview" *ngIf="post.extFiles[i] === 'csv'">
-                                <img mat-card-image matTooltip="{{post.namesFiles[i]}}" src="../../../assets/icons/zip.png" class="dr-preview" *ngIf="post.extFiles[i] === 'zip'">
-                                <img mat-card-image matTooltip="{{post.namesFiles[i]}}" src="../../../assets/icons/rar.png" class="dr-preview" *ngIf="post.extFiles[i] === 'rar'">
-                                <a mat-icon-button [href]="url"><i class="fas fa-file-download"></i></a>
+                        <div *ngIf="post.attachments" class="dr-group-files">
+                            <div *ngFor="let attached of post.attachments; let i = index">
+                                <img mat-card-image matTooltip="{{attached.name}}" src="../../../assets/icons/pdf.png" class="dr-preview" *ngIf="attached.ext === 'pdf'">
+                                <img mat-card-image matTooltip="{{attached.name}}" src="../../../assets/icons/excel.png" class="dr-preview" *ngIf="attached.ext === 'xlsx'">
+                                <img mat-card-image matTooltip="{{attached.name}}" src="../../../assets/icons/ppt.png" class="dr-preview" *ngIf="attached.ext === 'pptx'">
+                                <img mat-card-image matTooltip="{{attached.name}}" src="../../../assets/icons/word.png" class="dr-preview" *ngIf="attached.ext === 'docx'">
+                                <img mat-card-image matTooltip="{{attached.name}}" src="../../../assets/icons/csv.png" class="dr-preview" *ngIf="attached.ext === 'csv'">
+                                <img mat-card-image matTooltip="{{attached.name}}" src="../../../assets/icons/zip.png" class="dr-preview" *ngIf="attached.ext === 'zip'">
+                                <img mat-card-image matTooltip="{{attached.name}}" src="../../../assets/icons/rar.png" class="dr-preview" *ngIf="attached.ext === 'rar'">
+                                <a mat-icon-button [href]="attached.url"><i class="fas fa-file-download"></i></a>
                             </div>
                         </div>
                         <mat-card-content>
-                            <p>
-                                {{post.text}}
-                            </p>
+                            <div *ngIf="post.text" class="dr-dix-texarea-body dr-text-tab" [froalaView]="post.text"></div>
                         </mat-card-content>
                         <mat-card-actions>
-                            <button mat-button>LIKE</button>
-                            <button mat-button>SHARE</button>
+                                <button mat-icon-button [disabled]="user == ''" class="dr-pulse-clear dr-icon-push"><i matTooltip="Ingresa para activar los likes" [matTooltipDisabled]="user != ''"  class="fas fa-heart dr-icon"></i></button>
+                                <button mat-icon-button [disabled]="user == ''" class="dr-pulse-clear dr-icon-push"><i matTooltip="Ingresa para compartir" [matTooltipDisabled]="user != ''"  class="fas fa-share-alt dr-icon"></i></button>
+                                <button mat-icon-button (click)="commentPost(post)" [disabled]="user == ''" class="dr-pulse-clear dr-button-rigth dr-icon-push"><i matTooltip="Ingresa para comentar" [matTooltipDisabled]="user != ''"  class="fas fa-comment dr-icon"></i></button>
                         </mat-card-actions>
 
                         <!--Acordeon-->
@@ -105,48 +101,23 @@
                                     </mat-panel-description>
                                 </mat-expansion-panel-header>
                                 <mat-nav-list class="dr-nav">
-                                    <a mat-list-item class="dr-item-lis">
+                                    <a *ngFor="let comment of post.comments; let i=index" mat-list-item class="dr-item-lis">
                                         <div class="scrollbar" id="style-1">
-                                            <p mat-line class="dr-user-post-public">DaVid Roa
-                                                <span class="dr-subline">{{datePost | date: 'longDate'}}</span>
+                                            <p mat-line class="dr-user-post-public">{{comment.user}}
+                                                <span class="dr-subline">{{comment.date | date: 'longDate'}}</span>
                                             </p>
                                             <p mat-line class="dr-adjust-text">
-                                                <span class="dr-post-coment">Con más de 30 años de trayectoria solista, su obra musical está compuesta por 23 álbumes de estudio, 1 maxi sencillo, 4 álbumes en directo, 3 DVD, 12 álbumes recopilatorios</span>
+                                                <span class="dr-post-coment">{{comment.message}}</span>
                                             </p>
                                         </div>
-                                        <img mat-list-avatar src="../../../assets/image/david-logo-circle.png" alt="">
-                                    </a>
-
-                                    <a mat-list-item class="dr-item-lis">
-                                        <div class="scrollbar" id="style-1">
-                                            <p mat-line class="dr-user-post-public">DaVid Roa
-                                                <span class="dr-subline">{{date | date: 'longDate'}}</span>
-                                            </p>
-                                            <p mat-line class="dr-adjust-text">
-                                                <span class="dr-post-coment">Good!</span>
-                                            </p>
-                                        </div>
-                                        <img mat-list-avatar src="../../../assets/image/david-profile-photo.jpeg" alt="">
-                                    </a>
+                                        <img mat-list-avatar src="../../../assets/image/user.gif" alt="">
+                                    </a>                                  
                                 </mat-nav-list>
-                                <div class="dr-post-body">
-                                    <div class="dr-post dr-user-coments">
-                                        <mat-card-header>
-                                            <div mat-card-avatar class="dr-header-image"></div>
-                                            <mat-card-title>David Roa</mat-card-title>
-                                            <mat-card-subtitle>{{date | date: 'longDate'}}</mat-card-subtitle>
-                                        </mat-card-header>
-                                    </div>
-                                    <div class="dr-timeline-post dr-user-message">
-                                        <textarea class="dr-textarea-dark dr-user-textarea" rows="2"></textarea>
-                    <button mat-raised-button color="accent" class="dr-pulse-clear">Publicar</button>
+                            </mat-expansion-panel>
+                        </mat-accordion>
+                    </mat-card>
                 </div>
             </div>
-            </mat-expansion-panel>
-            </mat-accordion>
-            </mat-card>
-        </div>
-        </div>
         <div class="dr-timeline-post">
             <div class="dr-publis-post mat-elevation-z4">
                 <mat-toolbar color="dark-gray" class="dr-toolbar-activity">
@@ -158,7 +129,7 @@
                             <span class="dr-post-public">Publicaste en tu perfil</span>
                         </h1>
                         <p mat-line>
-                            <span class="dr-subline">{{datePost | date: 'longDate'}}</span>
+                            <span class="dr-subline">{{date | date: 'longDate'}}</span>
                         </p>
                         <img mat-list-avatar src="../../../assets/image/david-profile-photo.jpeg" alt="">
                     </a>
@@ -168,7 +139,7 @@
                             <span class="dr-post-public">Comentó tu post</span>
                         </h1>
                         <p mat-line>
-                            <span class="dr-subline">{{datePost | date: 'longDate'}}</span>
+                            <span class="dr-subline">{{date | date: 'longDate'}}</span>
                         </p>
                         <img mat-list-avatar src="../../../assets/image/david-logo-circle.png" alt="">
                     </a>

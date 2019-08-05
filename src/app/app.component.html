@@ -19,6 +19,11 @@
             <button mat-icon-button (click)="snav.toggle()" class="dr-icon-bob"><mat-icon class="dr-icon">menu</mat-icon></button>
             <h1 class="dr-app-name">David Roa</h1>
             <span class="dr-spacer"></span>
+            <button mat-icon-button>
+                <mat-icon *ngIf="type === 'PC'">desktop_windows</mat-icon>
+                <mat-icon *ngIf="type === 'MOBILE'">phone_android</mat-icon>
+                <mat-icon *ngIf="type === 'TABLET'">tablet</mat-icon>
+            </button>
             <button mat-icon-button *ngIf="suscriptor" (click)="infoUser()">
                 <mat-icon>how_to_reg</mat-icon>
             </button>
@@ -37,21 +42,25 @@
                     <mat-icon>stop_screen_share</mat-icon>
                     <span>Desabilitar Menu</span>
                 </button>
-                <button mat-menu-item *ngIf="!valueAlert" (click)="subscribeToNotifications(true)" class="dr-push-btn">
+                <button mat-menu-item *ngIf="!valueAlert && suscriptor != ''" (click)="subscribeToNotifications(true)" class="dr-push-btn">
                     <mat-icon>notifications_active</mat-icon>
                     <span>Habilitar Alertas</span>
                 </button>
-                <button mat-menu-item *ngIf="valueAlert" (click)="unsubscribeToNotification(false)">
+                <button mat-menu-item *ngIf="valueAlert && suscriptor != ''" (click)="unsubscribeToNotification(false)">
                     <mat-icon>notifications_off</mat-icon>
                     <span>Desabilitar Alertas</span>
                 </button>
-                <button mat-menu-item *ngIf="valueAlert" (click)="sendNotificationTest()">
+                <button mat-menu-item *ngIf="valueAlert && suscriptor != ''" (click)="sendNotificationTest()">
                     <mat-icon>send</mat-icon>
                     <span>Notificacion de Prueba</span>
                 </button>
-                <button mat-menu-item *ngIf="suscriptor === undefined" (click)="suscriptionUser()">
+                <button mat-menu-item *ngIf="suscriptor === ''" (click)="suscriptionUser()">
                     <mat-icon>person_add</mat-icon>
-                    <span>Suscribete</span>
+                    <span>Ingresar</span>
+                </button>
+                <button mat-menu-item *ngIf="suscriptor != ''" (click)="logout()">
+                    <mat-icon>person_add_disabled</mat-icon>
+                    <span>Cerrar Sessión</span>
                 </button>
             </mat-menu>
         </mat-toolbar>

@@ -9,7 +9,7 @@
                 <mat-form-field class="dr-from-field-input">
                     <input matInput type="email" class="dr-input" placeholder="email" [formControl]="emailFormControl" autocomplete="off">
                     <mat-error *ngIf="!emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
-                        Usuario <strong>Incorrecto</strong>
+                        Usuario ya <strong>existe!</strong>
                     </mat-error>
                     <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
                         Ingrese un Email Valido!
@@ -20,32 +20,15 @@
                 </mat-form-field>
                 <mat-form-field class="dr-from-field-input">
                     <input matInput type="password" class="dr-input" placeholder="password" [formControl]="passFormControl" autocomplete="off">
-                    <mat-error *ngIf="!passFormControl.hasError('minlength') && !passFormControl.hasError('required')">
-                        Constraseña <strong>Incorrecta</strong>
-                    </mat-error>
                     <mat-error *ngIf="passFormControl.hasError('minlength') && !passFormControl.hasError('required')">
                         Debe ser contener mas de 8 caracteres!
                     </mat-error>
                     <mat-error *ngIf="passFormControl.hasError('required')">
-                        Constraseña es <strong>requerido</strong>
+                        Password es <strong>requerido</strong>
                     </mat-error>
                 </mat-form-field>
             </form>
         </div>
-        <button mat-raised-button (click)="signIn()" color="accent" [disabled]="emailFormControl.status != 'VALID' || passFormControl.status != 'VALID'" class="dr-sign-60">Ingresar</button>
-        <div class="dr-text-top-20">
-            <span>Ingresa con</span>
-        </div>
-        <div>
-            <button mat-icon-button class="dr-login-social">
-                    <i class="fab fa-facebook-f dr-icon-social"></i>
-                </button>
-            <button mat-icon-button class="dr-login-social dr-m-l-20 ">
-                    <i class="fab fa-google dr-icon-social"></i>
-                </button>
-        </div>
-        <div class="dr-m-t-80">
-            <a (click)="signUp()">Resgístrate</a>
-        </div>
+        <button mat-raised-button (click)="registry()" color="accent" [disabled]="emailFormControl.status != 'VALID' || passFormControl.status != 'VALID'" class="dr-sign-60">Ingresar</button>
     </div>
 </div>

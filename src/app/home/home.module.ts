@@ -8,6 +8,7 @@ import { MessageComponent, SnackBarComponent } from './profile/message/message.c
 import { BodyComponent } from './body/body.component';
 import { UploadImage } from './body/upload/Image/upload-image.component';
 import { UploadFilePost } from './body/upload/file/upload-file.component';
+import { CommentPost } from './body/comment/comment.component';
 import { environment } from '../../environments/environment';
 
 import { FirebaseService } from '../services/firebase/firebase.service';
@@ -49,7 +50,8 @@ import { AngularFireModule } from '@angular/fire';
     SnackBarComponent,
     BodyComponent,
     UploadImage,
-    UploadFilePost
+    UploadFilePost,
+    CommentPost
   ],
   imports: [
     CommonModule,
@@ -91,9 +93,22 @@ import { AngularFireModule } from '@angular/fire';
     SnackBarComponent,
     BodyComponent,
     UploadImage,
-    UploadFilePost
+    UploadFilePost,
+    CommentPost
   ],
-  providers: [FirebaseService,SharedService],
-  bootstrap: [ProfileComponent, SocialComponent, MessageComponent, SnackBarComponent, BodyComponent, UploadImage, UploadFilePost]
+  providers: [
+    FirebaseService,
+    SharedService
+  ],
+  bootstrap: [
+    ProfileComponent, 
+    SocialComponent, 
+    MessageComponent, 
+    SnackBarComponent, 
+    BodyComponent, 
+    UploadImage, 
+    UploadFilePost,
+    CommentPost
+  ]
 })
 export class HomeModule { }

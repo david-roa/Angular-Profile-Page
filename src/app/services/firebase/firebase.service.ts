@@ -16,21 +16,6 @@ export class FirebaseService {
     private db: AngularFireDatabase,
     private afAuth: AngularFireAuth) { }
 
-  uploadFilePost(file: File, id: number, index: number) {
-    return new Promise(async (resolve, reject) => {
-      if (file != null) {
-        const metaData = { 'contentType': file.type };
-        const storageRef: firebase.storage.Reference = firebase.storage().ref(`/post/${id}/files/${index}-${file.name}`);
-        await storageRef.put(file, metaData);
-        firebase.storage().ref(`/post/${id}/files`).child(`/${index}-${file.name}`).getDownloadURL().then((url) => {
-          resolve(url)
-        })
-      } else {
-        resolve(null)
-      }
-    })
-  }
-
   /**
    * update token in firebase database
    * 
@@ -182,25 +167,6 @@ export class FirebaseService {
   }
 
   /**
-   * update token in firebase database
-   * 
-   * @param userId userId as a key 
-   * @param token token as a value
-   */
-  deleteFilesPostTemp(id, files, imges) {
-    this.afAuth.authState.pipe(take(1)).subscribe(
-      async () => {
-        const storageRef: firebase.storage.Reference = firebase.storage().ref(`/post/${id}/files`);
-        files.forEach((element,index) =>{
-          storageRef.child(`/${index}-${element}`).delete()
-        });
-        imges.forEach((element,index) =>{
-          storageRef.child(`/${index}-${element}`).delete()
-        });
-      })
-  }
-
-  /**
    * request permission for notification from firebase cloud messaging
    * 
    * @param userId userId
@@ -297,9 +263,21 @@ export class FirebaseService {
   }
 
   /**
+    * get Comments DB
+    */
+  getComments(idPost) {
+    return new Promise<any>(async (resolve, reject) => {
+      this.db.object(`public/post/${idPost}/comments`).valueChanges()
+        .subscribe((val) => {
+          resolve(val)
+        })
+    });
+  }
+
+  /**
     * get Post DB
     */
-   getPosts() {
+  getPosts() {
     return new Promise<any>(async (resolve, reject) => {
       this.db.list('public/post').valueChanges()
         .subscribe((val) => {

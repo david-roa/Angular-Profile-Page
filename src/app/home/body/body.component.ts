@@ -1,51 +1,61 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { UploadImage } from './upload/Image/upload-image.component';
 import { UploadFilePost } from './upload/file/upload-file.component';
-import { FirebaseService } from '../../services/firebase/firebase.service';
+import { CommentPost } from './comment/comment.component';
 import { SharedService } from '../../services/shared/shared-service.service';
 import FroalaEditor from 'froala-editor';
+import { map } from 'rxjs/operators';
+import { Post } from '../../model/profile/post';
+import { Attached } from '../../model/profile/atteched';
+import { Image } from '../../model/profile/image';
+import { PostService } from '../../services/app/profile/post.service';
+
 
 @Component({
   selector: 'app-body',
   templateUrl: './body.component.html',
   styleUrls: ['./body.component.css'],
 })
-export class BodyComponent implements OnInit {
+export class BodyComponent implements OnInit, AfterViewInit {
   public options: Object = {}
-
   panelOpenState = false;
-  date = new Date();
-  datePost = new Date("2019-03-04");
   file: File;
-  images = [];
-  nameImges = [];
-  namesFiles = [];
-  urlFiles = [];
-  extFiles = [];
   postTemp: string;
   limitFiles: boolean = false;
   limitImg: boolean = false;
   user: string;
-  idNewPost: number;
+  inTempPost: number = new Date().getTime();
+  date: Date = new Date();
   imgProfile: string = '../../../assets/image/user.gif';
   viewFroala: boolean = true;
   nameEditor: string = '';
-  listPosts = []
+  commentTemp: string = '';
+
+  public testListComments: Comment[] = [];
+  public posts: Post[] = [];
+  public images: Image[] = [];
+  public attachments: Attached[] = [];
+
 
   constructor(public dialog: MatDialog,
     private sharedService: SharedService,
-    private messagingService: FirebaseService) {
+    private ps: PostService) {
     this.file = new File(new Array<Blob>(), "Mock");
-    this.idNewPost = new Date().getTime();
     this.initFroala();
     this.showFroala();
-    this.getPosts();
+  }
+
+  ngAfterViewInit() {
+    this.ps.getPost().snapshotChanges().pipe(
+      map(actions => actions.map(a => ({ key: a.payload.key, ...a.payload.val() })))
+    ).subscribe(items => this.posts = items);
   }
 
   ngOnInit() {
     this.sharedService.suscriptor.subscribe((val) => {
-      this.user = val.split('@')[0];
+      if (val != null)
+        this.user = val.split('@')[0];
     })
   }
 
@@ -57,9 +67,11 @@ export class BodyComponent implements OnInit {
     dialogRef.afterClosed().subscribe(async result => {
       if (result != null) {
         this.file = result;
-        this.nameImges.push(this.file.name);
-        var url = await this.messagingService.uploadFilePost(this.file, this.idNewPost, this.images.length);
-        this.images.push(url);
+        const url = await this.ps.uploadFilePost(this.file, this.inTempPost, this.images.length);
+        const image: Image = new Image();
+        image.name = this.file.name;
+        image.url = url;
+        this.images.push(image);
       }
       if (this.images.length < 10) {
       } else {
@@ -67,6 +79,7 @@ export class BodyComponent implements OnInit {
       }
     });
   }
+
   uploadFile() {
     const dialogRef = this.dialog.open(UploadFilePost, {
       width: '350px', height: '320px',
@@ -75,54 +88,45 @@ export class BodyComponent implements OnInit {
     dialogRef.afterClosed().subscribe(async result => {
       if (result != null) {
         this.file = result;
-        var url = await this.messagingService.uploadFilePost(this.file, this.idNewPost, this.namesFiles.length);
-        this.namesFiles.push(this.file.name);
-        this.extFiles.push(this.file.name.split('.')[1])
-        this.urlFiles.push(url);
+        const url = await this.ps.uploadFilePost(this.file, this.inTempPost, this.attachments.length);
+        const attachment: Attached = new Attached();
+        attachment.name = this.file.name;
+        attachment.ext = this.file.name.split('.')[1];
+        attachment.url = url;
+        this.attachments.push(attachment);
       }
-      if (this.extFiles.length < 5) {
+      if (this.attachments.length < 4) {
       } else {
         this.limitFiles = true;
       }
     });
   }
+
   deletePostTemp() {
-    this.messagingService.deleteFilesPostTemp(this.idNewPost, this.namesFiles, this.nameImges)
+    this.ps.deleteFilesTemp(this.images, this.attachments)
     this.limitImg = null;
     this.limitFiles = null;
     this.images = [];
-    this.nameImges = [];
-    this.namesFiles = [];
-    this.extFiles = [];
-    this.urlFiles = [];
+    this.attachments = [];
     this.postTemp = null;
   }
 
   createNewPost() {
-    var newPost = {
-      id: this.idNewPost,
-      imgProfile: this.imgProfile,
-      user: this.user.split('@')[0],
-      date: this.date,
-      text: this.postTemp,
-      images: this.images,
-      extFiles: this.extFiles,
-      namesFiles: this.namesFiles,
-      urlsFiles: this.urlFiles,
-      coments: []
-    }
-    this.messagingService.saveNewPost(newPost, this.idNewPost).then(() => {
-      this.listPosts[0].push(newPost);
-      this.limitImg = null;
-      this.limitFiles = null;
-      this.images = [];
-      this.nameImges = [];
-      this.namesFiles = [];
-      this.extFiles = [];
-      this.urlFiles = [];
-      this.postTemp = null;      
-    })
+    const post: Post = new Post();
+    post.user = this.user;
+    post.text = this.postTemp;
+    post.imgProfile = this.imgProfile;
+    post.images = this.images;
+    post.attachments = this.attachments;
+    this.ps.createPost(post)
+    this.limitImg = null;
+    this.limitFiles = null;
+    this.posts = [];
+    this.images = [];
+    this.attachments = [];
+    this.postTemp = null;
   }
+
   initFroala() {
     FroalaEditor.DefineIcon('clear', { NAME: 'trash', SVG_KEY: 'trash' });
     FroalaEditor.RegisterCommand('clear', {
@@ -138,9 +142,8 @@ export class BodyComponent implements OnInit {
   }
 
   showFroala() {
-    this.postTemp = "-";
     this.viewFroala = !this.viewFroala;
-    if (this.viewFroala){
+    if (this.viewFroala) {
       this.nameEditor = 'Editor Clasico!'
       this.options = {
         placeholderText: 'Edita tu Post!',
@@ -170,16 +173,23 @@ export class BodyComponent implements OnInit {
         iconsTemplate: 'font_awesome_5',
         quickInsertButtons: ['table', 'ol', 'ul']
       };
-    } else{
+    } else {
       this.nameEditor = 'Editor Froala!';
-      this.options = {placeholderText: ''}
+      this.options = { placeholderText: '' }
     }
   }
 
-  getPosts(){
-    this.messagingService.getPosts().then((val) =>{
-      this.listPosts.push(val);
+  commentPost(post) {
+    this.dialog.open(CommentPost, {
+      width: '350px', height: '320px',
+      data: { post: post, user: this.user }
     });
-    console.log(this.listPosts)
+  }
+
+  deleteAtt(url, index) {
+    this.ps.deleteFileTemp(url);
+    this.attachments.splice(index, 1)
+    if (this.attachments.length < 4)
+      this.limitFiles = false;
   }
 }

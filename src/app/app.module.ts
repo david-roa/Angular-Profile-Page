@@ -29,8 +29,9 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 
 import { FirebaseService } from './services/firebase/firebase.service';
-import { HttpHelperService } from './services/http/help-http.service';
 import { SharedService } from './services/shared/shared-service.service';
+import { AuthService } from './services/app/auth/auth.service';
+import { TokenService } from './services/app/auth/token.service';
 
 import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 
@@ -76,7 +77,12 @@ import { AngularFireModule } from '@angular/fire';
     AngularFireMessagingModule,
     AngularFireModule.initializeApp(environment.firebase),
   ],
-  providers: [FirebaseService, HttpHelperService, SharedService],
+  providers: [
+    FirebaseService,
+    SharedService,
+    AuthService,
+    TokenService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

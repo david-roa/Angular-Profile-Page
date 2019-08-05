@@ -158,6 +158,10 @@ body {
     color: #a7a7a7;
 }
 
+.mat-dialog-container {
+    border-radius: 25px !important;
+}
+
 .fr-toolbar {
     border: 0 !important;
 }

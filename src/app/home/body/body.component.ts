@@ -40,7 +40,8 @@ export class BodyComponent implements OnInit, AfterViewInit {
 
   constructor(public dialog: MatDialog,
     private sharedService: SharedService,
-    private ps: PostService) {
+    private ps: PostService
+    ) {
     this.file = new File(new Array<Blob>(), "Mock");
     this.initFroala();
     this.showFroala();

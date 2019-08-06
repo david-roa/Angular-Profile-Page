@@ -26,13 +26,13 @@
 
 @media (max-width: 500px) {
     .dr-title-login {
-        font-size: 15px;
+        font-size: 20px;
     }
     .dr-p-b-40 {
-        padding-bottom: 20px;
+        padding-bottom: 40px;
     }
     .dr-img-login {
-        width: 70px;
+        width: 90px;
     }
     .mat-form-field-infix {
         border-top-width: 5px;
@@ -46,6 +46,15 @@
     }
     .dr-icon-social {
         font-size: 20px !important;
+    }
+    .dr-sign-60 {
+        margin-top: 20px;
+    }
+    .dr-text-top-20 {
+        margin-top: 30px !important;
+    }
+    .dr-botton-social-top {
+        margin-top: 40px;
     }
 }
 

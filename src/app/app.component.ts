@@ -119,7 +119,7 @@ export class AppComponent implements OnDestroy {
 
   suscriptionUser() {
     const dialogRef = this.dialog.open(Suscription, {
-      width: '320px', height: '680px',
+      width: '320px', height: '650px',
       data: { type: this.type }
     });
     dialogRef.afterClosed().subscribe(result => {

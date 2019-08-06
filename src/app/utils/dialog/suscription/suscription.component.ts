@@ -63,4 +63,15 @@ export class Suscription implements OnInit {
       })
     });
   }
+
+  signGoogle(){
+    this.as.googleSignin()
+    .then((res) => this.dialogRef.close())
+      .catch((err) => {
+        if (err.code == 'auth/user-not-found')
+          this.emailFormControl.setErrors({ invalid: true })
+        else if (err.code == 'auth/wrong-password')
+          this.passFormControl.setErrors({ invalid: true })
+      })
+  }
 }

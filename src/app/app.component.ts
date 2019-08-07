@@ -125,7 +125,7 @@ export class AppComponent implements OnDestroy {
     dialogRef.afterClosed().subscribe(result => {
       this.af.authState.pipe(take(1)).subscribe(async (user) => {
         if (user) {
-          this.suscriptor = user.email;
+          this.suscriptor = user.displayName;
           this.sharedSuscriptor();
         }
       })

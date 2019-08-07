@@ -2,7 +2,8 @@ import { Component, OnInit, ViewEncapsulation, Inject } from '@angular/core';
 import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormControl, Validators } from '@angular/forms';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { AuthService } from '../../../services/app/auth/auth.service'
+import { AuthService } from '../../../services/app/auth/auth.service';
+import { TokenService } from '../../../services/app/auth/token.service';
 import { Registry } from '../registry/registry.component'
 import { take } from 'rxjs/operators';
 
@@ -34,7 +35,8 @@ export class Suscription implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     public dialog: MatDialog,
     private as: AuthService,
-    private af: AngularFireAuth
+    private af: AngularFireAuth,
+    private ts: TokenService
   ) { }
 
   ngOnInit() {}
@@ -58,6 +60,7 @@ export class Suscription implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       this.af.authState.pipe(take(1)).subscribe(async (user) => {
         if (user) {
+          console.log(user)
           this.dialogRef.close();
         }
       })
@@ -66,12 +69,17 @@ export class Suscription implements OnInit {
 
   signGoogle(){
     this.as.googleSignin()
-    .then((res) => this.dialogRef.close())
-      .catch((err) => {
-        if (err.code == 'auth/user-not-found')
-          this.emailFormControl.setErrors({ invalid: true })
-        else if (err.code == 'auth/wrong-password')
-          this.passFormControl.setErrors({ invalid: true })
-      })
+    .then((res) => {
+      this.ts.createUser(this.data.type);
+      this.dialogRef.close()
+    })
+  }
+
+  signFacebook(){
+    this.as.facebookSignin()
+    .then((res) => {      
+      this.ts.createUser(this.data.type);
+      this.dialogRef.close()
+    })
   }
 }

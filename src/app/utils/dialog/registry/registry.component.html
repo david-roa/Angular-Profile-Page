@@ -2,10 +2,30 @@
     <div class="dr-center-info">
         <h3 class="dr-title-login">Bienvenido</h3>
         <div class="dr-p-b-40">
-            <img class="dr-img-login" src="../../../../assets/image/david-logo-primary.png" alt="">
+            <mat-form-field>
+                <mat-label>Imagen de Perfil</mat-label>
+                <mat-select [formControl]="photoFormControl" panelClass="dr-panel-dark" required>
+                    <mat-optgroup class="dr-w-50" *ngFor="let group of icons" [label]="group.name">
+                        <mat-option class="dr-w-50" *ngFor="let ico of group.icon" [value]="ico.url">
+                            <img class="dr-icon-profile" src="{{ico.url}}">{{ico.name}}
+                        </mat-option>
+                    </mat-optgroup>
+                </mat-select>
+                <mat-error *ngIf="photoFormControl.hasError('required')">Porfavor seleccione una Imagen</mat-error>
+                <mat-hint>{{photoFormControl.value?.url}}</mat-hint>
+            </mat-form-field>
         </div>
         <div>
             <form>
+                <mat-form-field class="dr-from-field-input">
+                    <input matInput class="dr-input" placeholder="username" [formControl]="userNameFormControl" autocomplete="off">
+                    <mat-error *ngIf="userNameFormControl.hasError('minlength') && !userNameFormControl.hasError('required')">
+                        Debe ser contener mas de 5 caracteres!
+                    </mat-error>
+                    <mat-error *ngIf="userNameFormControl.hasError('required')">
+                        User Name es <strong>requerido</strong>
+                    </mat-error>
+                </mat-form-field>
                 <mat-form-field class="dr-from-field-input">
                     <input matInput type="email" class="dr-input" placeholder="email" [formControl]="emailFormControl" autocomplete="off">
                     <mat-error *ngIf="!emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
@@ -29,6 +49,6 @@
                 </mat-form-field>
             </form>
         </div>
-        <button mat-raised-button (click)="registry()" color="accent" [disabled]="emailFormControl.status != 'VALID' || passFormControl.status != 'VALID'" class="dr-sign-60">Ingresar</button>
+        <button mat-raised-button (click)="registry()" color="accent" [disabled]="emailFormControl.status != 'VALID' || passFormControl.status != 'VALID' || userNameFormControl.status != 'VALID' || photoFormControl.status != 'VALID'" class="dr-sign-60">Ingresar</button>
     </div>
 </div>

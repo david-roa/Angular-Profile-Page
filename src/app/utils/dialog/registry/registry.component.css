@@ -24,6 +24,17 @@
     top: 13px !important;
 }
 
+.mat-select-panel-wrap {
+    flex-basis: 0 !important;
+    text-align: -webkit-center;
+}
+
+.dr-w-50 {
+    padding-right: 0px !important;
+    padding-left: 0px !important;
+    width: 35px;
+}
+
 .dr-from-field-input {
     width: 230px;
 }
@@ -62,4 +73,13 @@
 
 .dr-icon-social {
     font-size: 30px;
+}
+
+.dr-panel-dark {
+    background: #797979ef;
+}
+
+.dr-icon-profile {
+    width: 35px;
+    margin-top: 20px;
 }

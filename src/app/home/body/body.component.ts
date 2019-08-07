@@ -56,7 +56,7 @@ export class BodyComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.sharedService.suscriptor.subscribe((val) => {
       if (val != null)
-        this.user = val.split('@')[0];
+        this.user = val;
     })
   }
 

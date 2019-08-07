@@ -9,6 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatStepperModule } from '@angular/material/stepper';
+import { MatSelectModule } from '@angular/material/select';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { SharedService } from '../../../services/shared/shared-service.service';
@@ -34,7 +35,8 @@ import { Registry } from '../registry/registry.component'
     MatTooltipModule,
     MatStepperModule,
     MatFormFieldModule,
-    FormsModule, 
+    MatSelectModule,
+    FormsModule,
     MatInputModule,
     ReactiveFormsModule,
     /**
@@ -50,7 +52,7 @@ import { Registry } from '../registry/registry.component'
     Suscription,
     Registry
   ],
-  providers: [ 
+  providers: [
     SharedService
   ],
   bootstrap: [

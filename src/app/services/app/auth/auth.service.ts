@@ -3,9 +3,9 @@ import { Router } from '@angular/router';
 import { User } from '../../../model/app/userGoogle';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { auth } from 'firebase/app'
-import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
-import { Observable, of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
+import { take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -17,23 +17,25 @@ export class AuthService {
     private af: AngularFireAuth,
     private afs: AngularFirestore,
     private router: Router
-  ) {
-    // Get the auth state, then fetch the Firestore user document or return null
-    this.user$ = this.af.authState.pipe(
-      switchMap(user => {
-        if (user) {
-          return this.afs.doc<User>(`users/${user.uid}`).valueChanges();
-        } else {
-          return of(null);
-        }
-      })
-    )
-  }
+  ) { }
 
   registerUser(email: string, pass: string) {
     return new Promise<string>((resolve, reject) => {
       this.af.auth.createUserWithEmailAndPassword(email, pass)
         .then((user) => resolve(user.user.uid), err => reject(err))
+    })
+  };
+
+  updateUser(photo: string, username: string) {
+    return new Promise<string>((resolve, reject) => {
+      this.af.authState.pipe(take(1)).subscribe((user) => {
+        if (user) {
+          user.updateProfile({
+            displayName: username,
+            photoURL: photo
+          }).then((user:any) => resolve(user), err => reject(err))
+        }
+      })
     })
   };
 
@@ -49,9 +51,15 @@ export class AuthService {
   }
 
   googleSignin() {
-    return new Promise(async(resolve, reject) => {
-      const provider = new auth.GoogleAuthProvider();
-      const credential = await this.af.auth.signInWithPopup(provider);
+    return new Promise(async (resolve, reject) => {
+      const credential = await this.af.auth.signInWithPopup(new auth.GoogleAuthProvider());
+      resolve(credential.user);
+    })
+  }
+
+  facebookSignin() {
+    return new Promise(async (resolve, reject) => {
+      const credential = await this.af.auth.signInWithPopup(new auth.FacebookAuthProvider());
       resolve(credential.user);
     })
   }

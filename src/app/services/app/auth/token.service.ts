@@ -41,31 +41,17 @@ export class TokenService {
   }
 
   /**
-   * Save User in Token
-   * @param userName 
-   */
-  saveToken() {
-    this.af.authState.pipe(take(1)).subscribe(async (user) => {
-      if (user) {
-        var userToken = user.email.split('@', 1)[0];
-        const data = { user: userToken };
-        this.db.object(`fcmTokens/${userToken}`).update(data)
-      }
-    })
-  }
-
-  /**
    * request permission for notification from firebase cloud messaging
    * 
    * @param userId userId
    */
-  requestPermission(type:string) {
+  requestPermission(type: string) {
     this.message.requestPermission()
       .then(() => {
         return this.message.getToken();
       })
       .then((token) => {
-        this.updateToken(token,type)
+        this.updateToken(token, type)
       })
       .catch((err) => {
         console.log('Unablre to get permision to notify.', err);
@@ -77,14 +63,13 @@ export class TokenService {
   * 
   * @param token token as a value
   */
-  updateToken(token,type) {
+  updateToken(token, type) {
     this.af.authState.pipe(take(1)).subscribe((user) => {
       if (user) {
         var userToken = token.split(':', 1)[0] + "-" + token.substr(-5, 5);
-        var userName = user.email.split('@', 1)[0];;
         const data = {
           token: token,
-          user: userName
+          user: user.displayName
         };
         this.db.object(`fcmTokens/${userToken}`).update(data)
         this.createUser(type)
@@ -98,17 +83,14 @@ export class TokenService {
   createUser(type) {
     this.af.authState.pipe(take(1)).subscribe(async (user) => {
       if (user) {
-        var userName = user.email.split('@', 1)[0];
+        var prov = user.providerData[0].providerId.substr(0,2);
         const token = await this.getTokenDB();
         if (token != null) {
           var userToken = token.token.split(':', 1)[0] + "-" + token.token.substr(-5, 5);
-          var dataToken = { [userToken]: type }
-          this.db.object(`users/suscription/${userName}/tokens`).update(dataToken);
-          //this.saveToken();
-        } else {
-          /*var data = { noToken: user.uid };
-          this.db.object(`users/suscription/${userName}`).update(data);*/
+          this.db.object(`users/suscription/${prov}-${user.displayName}/tokens`).update({ [userToken]: type });
         }
+        this.db.object(`users/suscription/${prov}-${user.displayName}`).update({ login: user.photoURL });
+
       }
     })
   }
@@ -137,9 +119,9 @@ export class TokenService {
     this.af.authState.pipe(take(1)).subscribe((user) => {
       if (user) {
         var userToken = token.split(':', 1)[0] + "-" + token.substr(-5, 5);
-        var userId = user.email.split('@',1)[0];
+        var prov = user.providerData[0].providerId.substr(0,2);
         this.db.object(`fcmTokens/${userToken}`).remove();
-        this.db.object(`users/suscription/${userId}/tokens/${userToken}`).remove()
+        this.db.object(`users/suscription/${prov}-${user.displayName}/tokens/${userToken}`).remove()
       }
     })
   }

@@ -1,15 +1,17 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { UploadImage } from './upload/Image/upload-image.component';
 import { UploadFilePost } from './upload/file/upload-file.component';
-import { CommentPost } from './comment/comment.component';
-import { SharedService } from '../../services/shared/shared-service.service';
+import { Comment } from 'src/app/model/profile/comment';
 import FroalaEditor from 'froala-editor';
 import { map } from 'rxjs/operators';
 import { Post } from '../../model/profile/post';
 import { Attached } from '../../model/profile/atteched';
 import { Image } from '../../model/profile/image';
 import { PostService } from '../../services/app/profile/post.service';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { take } from 'rxjs/operators';
+import { element } from 'protractor';
 
 
 @Component({
@@ -17,14 +19,14 @@ import { PostService } from '../../services/app/profile/post.service';
   templateUrl: './body.component.html',
   styleUrls: ['./body.component.css'],
 })
-export class BodyComponent implements OnInit, AfterViewInit {
+export class BodyComponent implements OnInit {
   public options: Object = {}
   panelOpenState = false;
   file: File;
   postTemp: string;
   limitFiles: boolean = false;
   limitImg: boolean = false;
-  user: string;
+  user: string = '';
   inTempPost: number = new Date().getTime();
   date: Date = new Date();
   imgProfile: string = '../../../assets/image/user.gif';
@@ -39,25 +41,31 @@ export class BodyComponent implements OnInit, AfterViewInit {
 
 
   constructor(public dialog: MatDialog,
-    private sharedService: SharedService,
-    private ps: PostService
-    ) {
+    private ps: PostService,
+    private af: AngularFireAuth
+  ) {
     this.file = new File(new Array<Blob>(), "Mock");
     this.initFroala();
     this.showFroala();
   }
 
-  ngAfterViewInit() {
-    this.ps.getPost().snapshotChanges().pipe(
+  async ngOnInit() {
+    this.af.auth.onAuthStateChanged((user) => {
+      if (user) {
+        this.user = user.emailVerified || user.providerData[0].providerId.includes('facebook') ? user.displayName : '';
+        this.imgProfile = user.emailVerified || user.providerData[0].providerId.includes('facebook') ? user.photoURL : '../../../assets/image/user.gif';
+      } else {
+        this.user = '';
+        this.imgProfile = '../../../assets/image/user.gif';
+      }
+    });
+    await this.ps.getPost().snapshotChanges().pipe(
       map(actions => actions.map(a => ({ key: a.payload.key, ...a.payload.val() })))
-    ).subscribe(items => this.posts = items);
+    ).subscribe(items => this.posts = items.reverse());
   }
 
-  ngOnInit() {
-    this.sharedService.suscriptor.subscribe((val) => {
-      if (val != null)
-        this.user = val;
-    })
+  openComments(){
+    this.panelOpenState = !this.panelOpenState;
   }
 
   uploadImg() {
@@ -113,19 +121,23 @@ export class BodyComponent implements OnInit, AfterViewInit {
   }
 
   createNewPost() {
-    const post: Post = new Post();
-    post.user = this.user;
-    post.text = this.postTemp;
-    post.imgProfile = this.imgProfile;
-    post.images = this.images;
-    post.attachments = this.attachments;
-    this.ps.createPost(post)
-    this.limitImg = null;
-    this.limitFiles = null;
-    this.posts = [];
-    this.images = [];
-    this.attachments = [];
-    this.postTemp = null;
+    this.af.authState.pipe(take(1)).subscribe(async (user) => {
+      if (user) {
+        const post: Post = new Post();
+        post.user = user.displayName;
+        post.text = this.postTemp;
+        post.imgProfile = user.photoURL;
+        post.images = this.images;
+        post.attachments = this.attachments;
+        this.ps.createPost(post)
+        this.limitImg = null;
+        this.limitFiles = null;
+        this.posts = [];
+        this.images = [];
+        this.attachments = [];
+        this.postTemp = null;
+      }
+    })
   }
 
   initFroala() {
@@ -180,17 +192,28 @@ export class BodyComponent implements OnInit, AfterViewInit {
     }
   }
 
-  commentPost(post) {
-    this.dialog.open(CommentPost, {
-      width: '350px', height: '320px',
-      data: { post: post, user: this.user }
-    });
-  }
-
   deleteAtt(url, index) {
     this.ps.deleteFileTemp(url);
     this.attachments.splice(index, 1)
     if (this.attachments.length < 4)
       this.limitFiles = false;
+  }
+
+  commentPost(val) {
+    this.af.authState.pipe(take(1)).subscribe(async (user) => {
+      if (user) {
+        var key = val.key;
+        var post: Post = val;
+        var comment: Comment = new Comment();
+        comment.user = this.user;
+        comment.imgProfile = user.photoURL;
+        comment.message = this.commentTemp;
+        if (post.comments == undefined)
+          post.comments = [];
+        post.comments.push(comment)
+        this.ps.updateItem(key, post);
+        this.commentTemp = '';
+      }
+    })
   }
 }

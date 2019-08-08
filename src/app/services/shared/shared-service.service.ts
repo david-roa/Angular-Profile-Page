@@ -6,14 +6,9 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class SharedService {
 
-  suscriptor: BehaviorSubject<string> = new BehaviorSubject<string>("");
-  uid: BehaviorSubject<string> = new BehaviorSubject<string>("admin");
+  /*suscriptor: BehaviorSubject<string> = new BehaviorSubject<string>("");
 
   sharedSuscriptor(data) {
     this.suscriptor.next(data);
-  }
-
-  sharedUidUser(data){
-    this.uid.next(data);
-  }
+  }*/
 }

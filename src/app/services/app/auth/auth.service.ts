@@ -1,28 +1,25 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { User } from '../../../model/app/userGoogle';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { auth } from 'firebase/app'
-import { AngularFirestore } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  user$: Observable<User>;
 
   constructor(
     private af: AngularFireAuth,
-    private afs: AngularFirestore,
-    private router: Router
   ) { }
 
   registerUser(email: string, pass: string) {
     return new Promise<string>((resolve, reject) => {
       this.af.auth.createUserWithEmailAndPassword(email, pass)
-        .then((user) => resolve(user.user.uid), err => reject(err))
+        .then((user) => {
+          user.user.sendEmailVerification().then((res) =>{
+            resolve(user.user.uid);
+          })
+        }, err => reject(err))
     })
   };
 
@@ -42,7 +39,7 @@ export class AuthService {
   loginEmailUser(email: string, pass: string) {
     return new Promise<string>((resolve, reject) => {
       this.af.auth.signInWithEmailAndPassword(email, pass)
-        .then((user) => resolve(user.user.uid), err => reject(err))
+        .then((user:any) => resolve(user.user), err => reject(err))
     })
   }
 

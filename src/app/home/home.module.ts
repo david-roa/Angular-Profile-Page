@@ -8,7 +8,6 @@ import { MessageComponent, SnackBarComponent } from './profile/message/message.c
 import { BodyComponent } from './body/body.component';
 import { UploadImage } from './body/upload/Image/upload-image.component';
 import { UploadFilePost } from './body/upload/file/upload-file.component';
-import { CommentPost } from './body/comment/comment.component';
 import { environment } from '../../environments/environment';
 
 import { FirebaseService } from '../services/firebase/firebase.service';
@@ -30,6 +29,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTreeModule } from '@angular/material/tree';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatRippleModule } from '@angular/material/core';
+import { MatBadgeModule } from '@angular/material/badge';
 
 import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 
@@ -51,7 +52,6 @@ import { AngularFireModule } from '@angular/fire';
     BodyComponent,
     UploadImage,
     UploadFilePost,
-    CommentPost
   ],
   imports: [
     CommonModule,
@@ -75,7 +75,9 @@ import { AngularFireModule } from '@angular/fire';
     MatSnackBarModule,
     MatTreeModule,
     MatExpansionModule,
-    FroalaEditorModule.forRoot(), 
+    MatBadgeModule,
+    MatRippleModule,
+    FroalaEditorModule.forRoot(),
     FroalaViewModule.forRoot(),
     /**
      * Firebase
@@ -94,21 +96,19 @@ import { AngularFireModule } from '@angular/fire';
     BodyComponent,
     UploadImage,
     UploadFilePost,
-    CommentPost
   ],
   providers: [
     FirebaseService,
     SharedService
   ],
   bootstrap: [
-    ProfileComponent, 
-    SocialComponent, 
-    MessageComponent, 
-    SnackBarComponent, 
-    BodyComponent, 
-    UploadImage, 
+    ProfileComponent,
+    SocialComponent,
+    MessageComponent,
+    SnackBarComponent,
+    BodyComponent,
+    UploadImage,
     UploadFilePost,
-    CommentPost
   ]
 })
 export class HomeModule { }

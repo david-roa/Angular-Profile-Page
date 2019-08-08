@@ -3,7 +3,6 @@ import { ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { FirebaseService } from './services/firebase/firebase.service';
-import { SharedService } from './services/shared/shared-service.service';
 import { AuthService } from './services/app/auth/auth.service';
 import { TokenService } from './services/app/auth/token.service';
 import { take } from 'rxjs/operators';
@@ -15,7 +14,7 @@ import { InfoUser } from './utils/dialog/info-user/info-user.component';
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  providers: [SharedService, TokenService]
+  providers: [TokenService]
 })
 export class AppComponent implements OnDestroy {
   mobileQuery: MediaQueryList;
@@ -49,7 +48,6 @@ export class AppComponent implements OnDestroy {
     changeDetectorRef: ChangeDetectorRef,
     media: MediaMatcher,
     private messagingService: FirebaseService,
-    private sharedService: SharedService,
     private as: AuthService,
     private af: AngularFireAuth,
     private ts: TokenService,
@@ -68,16 +66,11 @@ export class AppComponent implements OnDestroy {
     this.mobileQuery.removeListener(this._mobileQueryListener);
   }
 
-  sharedSuscriptor() {
-    this.sharedService.sharedSuscriptor(this.suscriptor);
-  }
-
   ngOnInit() {
-    this.af.authState.pipe(take(1)).subscribe(async (user) => {
-      if (user) {
-        this.suscriptor = user.email;
-        this.sharedSuscriptor();
-      }
+    this.af.auth.onAuthStateChanged(async (user) => {
+      if (user) {        
+        this.suscriptor = user.emailVerified || user.providerData[0].providerId.includes('facebook') ? user.displayName : '';
+      } else this.suscriptor = '';
     });
     this.ts.receiveMessage()
     this.message = this.ts.currentMessage;
@@ -125,17 +118,13 @@ export class AppComponent implements OnDestroy {
     dialogRef.afterClosed().subscribe(result => {
       this.af.authState.pipe(take(1)).subscribe(async (user) => {
         if (user) {
-          this.suscriptor = user.displayName;
-          this.sharedSuscriptor();
+          this.suscriptor = user.emailVerified || user.providerData[0].providerId.includes('facebook') ? user.displayName : '';;
         }
       })
     });
   }
 
   logout() {
-    this.as.logoutUser().then(res => {
-      this.suscriptor = '';
-      this.sharedSuscriptor();
-    });
+    this.as.logoutUser();
   }
 }

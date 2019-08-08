@@ -7,8 +7,8 @@
                         <mat-card *ngIf="postTemp && postTemp != '-' || images.length != 0 || attachments.length != 0" color="dark-gray">
                             <mat-card class="dr-card-post-preview">
                                 <mat-card-header>
-                                    <div mat-card-avatar class="dr-header-image-user"></div>
-                                    <mat-card-title>{{user}}</mat-card-title>
+                                    <div mat-card-avatar class="dr-header-image" [ngStyle]="{'background-image': 'url('+imgProfile+')'}"></div>
+                                    <mat-card-title>{{user === '' ? 'User' : user}}</mat-card-title>
                                     <mat-card-subtitle>{{date| date: 'longDate'}}</mat-card-subtitle>
                                     <span class="dr-spacer"></span>
                                     <button mat-icon-button (click)="deletePostTemp()"><mat-icon>delete_forever</mat-icon></button>
@@ -55,9 +55,9 @@
                     <mat-divider class="dr-divider-30"></mat-divider>
                     <mat-card class="dr-card">
                         <mat-card-header>
-                            <div mat-card-avatar [ngClass]="{'dr-header-image': post.user == 'David Roa', 'dr-header-image-user': post.user != 'David Roa'}"></div>
-                            <mat-card-title>{{post.user}}</mat-card-title>
-                            <mat-card-subtitle>{{post.date | date: 'longDate'}}</mat-card-subtitle>
+                            <div mat-card-avatar class="dr-header-image" [ngStyle]="{'background-image': 'url('+post.imgProfile+')'}"></div>
+                            <mat-card-title class="dr-user-post-adjust-title">{{post.user}}</mat-card-title>
+                            <mat-card-subtitle class="dr-date-card">{{post.date | date: 'longDate'}}</mat-card-subtitle>
                             <span class="dr-spacer"></span>
                             <button mat-icon-button><mat-icon>more_vert</mat-icon></button>
                         </mat-card-header>
@@ -74,50 +74,58 @@
                                 <img mat-card-image matTooltip="{{attached.name}}" src="../../../assets/icons/csv.png" class="dr-preview" *ngIf="attached.ext === 'csv'">
                                 <img mat-card-image matTooltip="{{attached.name}}" src="../../../assets/icons/zip.png" class="dr-preview" *ngIf="attached.ext === 'zip'">
                                 <img mat-card-image matTooltip="{{attached.name}}" src="../../../assets/icons/rar.png" class="dr-preview" *ngIf="attached.ext === 'rar'">
-                                <a mat-icon-button [href]="attached.url"><i class="fas fa-file-download"></i></a>
+                                <a mat-icon-button [disabled]="user == ''" [href]="attached.url"><i class="fas fa-file-download"></i></a>
                             </div>
                         </div>
                         <mat-card-content>
                             <div *ngIf="post.text" class="dr-dix-texarea-body dr-text-tab" [froalaView]="post.text"></div>
                         </mat-card-content>
-                        <mat-card-actions>
+                        <mat-card-actions class="dr-card-actions-post">
                                 <button mat-icon-button [disabled]="user == ''" class="dr-pulse-clear dr-icon-push"><i matTooltip="Ingresa para activar los likes" [matTooltipDisabled]="user != ''"  class="fas fa-heart dr-icon"></i></button>
                                 <button mat-icon-button [disabled]="user == ''" class="dr-pulse-clear dr-icon-push"><i matTooltip="Ingresa para compartir" [matTooltipDisabled]="user != ''"  class="fas fa-share-alt dr-icon"></i></button>
-                                <button mat-icon-button (click)="commentPost(post)" [disabled]="user == ''" class="dr-pulse-clear dr-button-rigth dr-icon-push"><i matTooltip="Ingresa para comentar" [matTooltipDisabled]="user != ''"  class="fas fa-comment dr-icon"></i></button>
+                                <div matRipple class="dr-icon-comment-adjust dr-pulse-clear dr-icon-push"><i (click)="openComments()" matBadge="{{post.comments === undefined ? 0 : post.comments.length }}"  matBadgePosition="before" [matBadgeHidden]="user == ''" matTooltip="Ingresa para comentar" [matTooltipDisabled]="user != ''" [ngClass]="{'dr-disabled-icon': user == ''}" class="fas fa-comment dr-icon dr-button-rigth"></i></div>
                         </mat-card-actions>
 
                         <!--Acordeon-->
-                        <mat-accordion class="example-headers-align">
-                            <mat-expansion-panel hideToggle (opened)="panelOpenState = true" (closed)="panelOpenState = false">
-                                <mat-expansion-panel-header>
-                                    <mat-panel-title [class.dr-icon-float-away]="panelOpenState" [class.dr-icon-sink-away]="!panelOpenState">
+                        <mat-card class="dr-card-comment" >
+                                <mat-card-header matRipple (click)="openComments()">
+                                    <mat-panel-title class="dr-m-tb-515" [class.dr-icon-float-away]="panelOpenState" [class.dr-icon-sink-away]="!panelOpenState">
                                         <i *ngIf="!panelOpenState" class="dr-icon fas fa-hand-point-down"></i>
                                         <i *ngIf="panelOpenState" class="dr-icon fas fa-hand-point-up"></i>
                                         <span class="dr-spam-coments">Comentarios</span>
                                     </mat-panel-title>
-                                    <mat-panel-description>
-                                        <span class="dr-spacer"></span>
-                                        <mat-icon>account_circle</mat-icon>
-                                    </mat-panel-description>
-                                </mat-expansion-panel-header>
-                                <mat-nav-list class="dr-nav">
-                                    <a *ngFor="let comment of post.comments; let i=index" mat-list-item class="dr-item-lis">
-                                        <div class="scrollbar" id="style-1">
-                                            <p mat-line class="dr-user-post-public">{{comment.user}}
-                                                <span class="dr-subline">{{comment.date | date: 'longDate'}}</span>
-                                            </p>
-                                            <p mat-line class="dr-adjust-text">
-                                                <span class="dr-post-coment">{{comment.message}}</span>
-                                            </p>
-                                        </div>
-                                        <img mat-list-avatar src="../../../assets/image/user.gif" alt="">
-                                    </a>                                  
-                                </mat-nav-list>
-                            </mat-expansion-panel>
-                        </mat-accordion>
+                                </mat-card-header>
+                            <mat-card-content *ngIf="panelOpenState" class="dr-card-content-comment">
+                                <div *ngFor="let comment of post.comments; let i=index">
+                                    <mat-card class="dr-card-comments-list" [ngClass]="{'dr-animation-comments': panelOpenState}" [ngStyle]="{'animation-duration': i/10+1.5+'s'}">
+                                        <mat-card-header>
+                                            <div mat-card-avatar class="dr-header-image" [ngStyle]="{'background-image': 'url('+comment.imgProfile+')'}"></div>
+                                            <mat-card-title class="dr-user-post-public">{{comment.user}}</mat-card-title>
+                                            <mat-card-subtitle class="dr-date-card">
+                                                    {{comment.date | date: 'longDate'}}
+                                            </mat-card-subtitle>
+                                        </mat-card-header>
+                                        <mat-card-content>
+                                            <div class="scrollbar dr-adjust-text" id="style-1">{{comment.message}}</div>
+                                        </mat-card-content>
+                                    </mat-card>
+                                </div>
+                                <div>
+                                    <mat-card class="dr-card-comment">
+                                        <mat-card-header class="dr-header-card-comment">
+                                            <div mat-card-avatar class="dr-header-image" [ngStyle]="{'background-image': 'url('+imgProfile+')'}"></div>          
+                                            <textarea [(ngModel)]="commentTemp" class="dr-textarea-dark dr-not-resize" rows="1"></textarea>
+                    <div class="dr-w-10">
+                        <button mat-icon-button (click)="commentPost(post)" [disabled]="commentTemp == ''" class="dr-pulse-clear dr-button-top dr-icon-push"><i matTooltip="Ingresa un valor para enviar" [matTooltipDisabled]="commentTemp != ''"  class="fas fa-paper-plane dr-icon dr-send-comment"></i></button>
+                    </div>
+                    </mat-card-header>
                     </mat-card>
                 </div>
+                </mat-card-content>
+                </mat-card>
+                </mat-card>
             </div>
+        </div>
         <div class="dr-timeline-post">
             <div class="dr-publis-post mat-elevation-z4">
                 <mat-toolbar color="dark-gray" class="dr-toolbar-activity">

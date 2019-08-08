@@ -1,6 +1,7 @@
 export class Comment{
     id:number;
     user:string;
+    imgProfile: string;
     message:string;
     date:Date;  
     

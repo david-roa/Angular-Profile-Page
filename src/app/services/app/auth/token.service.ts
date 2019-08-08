@@ -41,6 +41,27 @@ export class TokenService {
   }
 
   /**
+    * get Token DB
+    */
+   getUser(userParam) {
+    return new Promise<Token>(async (resolve, reject) => {
+      const token = await this.message.getToken();
+      if (token) {
+        this.af.authState.pipe(take(1)).subscribe((user) => {
+          if (user) {
+            this.db.object(`users/suscription/${userParam}`).valueChanges()
+              .subscribe((val: Token) => {
+                resolve(val)
+              })
+          }
+        });
+      } else {
+        return null;
+      }
+    });
+  }
+
+  /**
    * request permission for notification from firebase cloud messaging
    * 
    * @param userId userId

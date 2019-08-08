@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Suscription } from './suscription.component';
+import { Suscription, SnackBarComponent } from './suscription.component';
 
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -10,6 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatSelectModule } from '@angular/material/select';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { SharedService } from '../../../services/shared/shared-service.service';
@@ -25,6 +26,7 @@ import { Registry } from '../registry/registry.component'
 @NgModule({
   declarations: [
     Suscription,
+    SnackBarComponent,
     Registry
   ],
   imports: [
@@ -36,6 +38,7 @@ import { Registry } from '../registry/registry.component'
     MatStepperModule,
     MatFormFieldModule,
     MatSelectModule,
+    MatSnackBarModule,
     FormsModule,
     MatInputModule,
     ReactiveFormsModule,
@@ -50,6 +53,7 @@ import { Registry } from '../registry/registry.component'
   ],
   exports: [
     Suscription,
+    SnackBarComponent,
     Registry
   ],
   providers: [
@@ -57,6 +61,7 @@ import { Registry } from '../registry/registry.component'
   ],
   bootstrap: [
     Suscription,
+    SnackBarComponent,
     Registry
   ]
 })

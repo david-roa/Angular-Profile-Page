@@ -78,7 +78,7 @@ export class Registry implements OnInit {
     this.as.registerUser(this.emailFormControl.value, this.passFormControl.value)
       .then(res => {
         this.as.updateUser(this.photoFormControl.value,this.userNameFormControl.value)
-        .then(rest => {
+        .then((rest) => {
           this.ts.createUser(this.data.type);
           this.dialogRef.close();
         })

@@ -30,17 +30,17 @@ export class AppComponent implements OnDestroy {
     }
   ];
   type: string;
-  valueMenu: boolean = true;
+  valueMenu = true;
   valueAlert: boolean;
   message;
-  suscriptor: string = '';
+  suscriptor = '';
   data = {
     title: 'Notificación',
     body: 'Prueba Exitosa de Envio',
     color: 'rgb(30, 33, 41)',
     icon: 'assets/image/david-logo-circle.png',
     link: 'www.google.com'
-  }
+  };
 
   private _mobileQueryListener: () => void;
 
@@ -68,14 +68,17 @@ export class AppComponent implements OnDestroy {
 
   ngOnInit() {
     this.af.auth.onAuthStateChanged(async (user) => {
-      if (user) {        
+      if (user) {
         this.suscriptor = user.emailVerified || user.providerData[0].providerId.includes('facebook') ? user.displayName : '';
-      } else this.suscriptor = '';
+      } else {
+        this.suscriptor = '';
+      }
     });
-    this.ts.receiveMessage()
+    this.ts.receiveMessage();
     this.message = this.ts.currentMessage;
-    if (this.type == null)
-      this.type = this.mobileQuery.matches ? 'MOBILE' : 'TABLET'
+    if (this.type == null) {
+      this.type = this.mobileQuery.matches ? 'MOBILE' : 'TABLET';
+    }
   }
 
   subscribeToNotifications(val) {

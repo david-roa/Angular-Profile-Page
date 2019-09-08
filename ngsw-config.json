@@ -1,28 +1,28 @@
 {
-  "$schema": "./node_modules/@angular/service-worker/config/schema.json",
-  "index": "/index.html",
-  "assetGroups": [
-    {
-      "name": "app",
-      "installMode": "prefetch",
-      "resources": {
-        "files": [
-          "/favicon.ico",
-          "/index.html",
-          "/*.css",
-          "/*.js"
-        ]
-      }
+    "$schema": "./node_modules/@angular/service-worker/config/schema.json",
+    "index": "/dev/pwa/index.html",
+    "assetGroups": [{
+        "name": "app",
+        "installMode": "prefetch",
+        "resources": {
+            "files": [
+                "/david.ico",
+                "/index.html",
+                "/dev/pwa/index.html",
+                "/*.css",
+                "/*.js"
+            ]
+        }
     }, {
-      "name": "assets",
-      "installMode": "lazy",
-      "updateMode": "prefetch",
-      "resources": {
-        "files": [
-          "/assets/**",
-          "/*.(eot|svg|cur|jpg|png|webp|gif|otf|ttf|woff|woff2|ani)"
-        ]
-      }
-    }
-  ]
+        "name": "assets",
+        "installMode": "lazy",
+        "updateMode": "prefetch",
+        "resources": {
+            "files": [
+                "/assets/**",
+                "/dev/pwa/index.html",
+                "/*.(eot|svg|cur|jpg|png|webp|gif|otf|ttf|woff|woff2|ani)"
+            ]
+        }
+    }]
 }

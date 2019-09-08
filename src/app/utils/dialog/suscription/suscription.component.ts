@@ -6,7 +6,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MAT_SNACK_BAR_DATA } from '@angular/material';
 import { AuthService } from '../../../services/app/auth/auth.service';
 import { TokenService } from '../../../services/app/auth/token.service';
-import { Registry } from '../registry/registry.component'
+import { Registry } from '../registry/registry.component';
 import { take } from 'rxjs/operators';
 
 export interface DialogData {
@@ -20,7 +20,7 @@ export interface DialogData {
   encapsulation: ViewEncapsulation.None
 })
 export class Suscription implements OnInit {
-  public status: string = '';
+  public status = '';
   emailFormControl = new FormControl('', [
     Validators.required,
     Validators.email,
@@ -47,17 +47,17 @@ export class Suscription implements OnInit {
     this.as.loginEmailUser(this.emailFormControl.value, this.passFormControl.value)
       .then((res: any) => {
         if (res.emailVerified) {
-          this.dialogRef.close()
+          this.dialogRef.close();
+        } else {
+          this.openSnackBar(res.displayName);
         }
-        else
-          this.openSnackBar(res.displayName)
-      })
-      .catch((err) => {
-        if (err.code == 'auth/user-not-found')
-          this.emailFormControl.setErrors({ invalid: true })
-        else if (err.code == 'auth/wrong-password')
-          this.passFormControl.setErrors({ invalid: true })
-      })
+      }).catch((err) => {
+        if (err.code === 'auth/user-not-found') {
+          this.emailFormControl.setErrors({ invalid: true });
+        } else if (err.code === 'auth/wrong-password') {
+          this.passFormControl.setErrors({ invalid: true });
+        }
+      });
   }
 
   signUp() {
@@ -68,14 +68,14 @@ export class Suscription implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       this.af.authState.pipe(take(1)).subscribe(async (user) => {
         if (user) {
-          if (user.emailVerified)
+          if (user.emailVerified) {
             this.dialogRef.close();
-          else{
+          } else {
             this.as.logoutUser();
             this.openSnackBar(user.displayName);
           }
         }
-      })
+      });
     });
   }
 
@@ -83,16 +83,16 @@ export class Suscription implements OnInit {
     this.as.googleSignin()
       .then((res: any) => {
         this.ts.createUser(this.data.type);
-        this.dialogRef.close()
-      })
+        this.dialogRef.close();
+      });
   }
 
   signFacebook() {
     this.as.facebookSignin()
       .then((res: any) => {
         this.ts.createUser(this.data.type);
-        this.dialogRef.close()
-      })
+        this.dialogRef.close();
+      });
   }
 
   openSnackBar(user) {

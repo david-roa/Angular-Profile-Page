@@ -88,13 +88,13 @@
 
                         <!--Acordeon-->
                         <mat-card class="dr-card-comment" >
-                                <mat-card-header matRipple (click)="openComments()">
-                                    <mat-panel-title class="dr-m-tb-515" [class.dr-icon-float-away]="panelOpenState" [class.dr-icon-sink-away]="!panelOpenState">
-                                        <i *ngIf="!panelOpenState" class="dr-icon fas fa-hand-point-down"></i>
-                                        <i *ngIf="panelOpenState" class="dr-icon fas fa-hand-point-up"></i>
-                                        <span class="dr-spam-coments">Comentarios</span>
-                                    </mat-panel-title>
-                                </mat-card-header>
+                            <mat-card-header matRipple (click)="openComments()">
+                                <mat-panel-title class="dr-m-tb-515" [class.dr-icon-float-away]="panelOpenState" [class.dr-icon-sink-away]="!panelOpenState">
+                                    <i *ngIf="!panelOpenState" class="dr-icon fas fa-hand-point-down"></i>
+                                    <i *ngIf="panelOpenState" class="dr-icon fas fa-hand-point-up"></i>
+                                    <span class="dr-spam-coments">Comentarios</span>
+                                </mat-panel-title>
+                            </mat-card-header>
                             <mat-card-content *ngIf="panelOpenState" class="dr-card-content-comment">
                                 <div *ngFor="let comment of post.comments; let i=index">
                                     <mat-card class="dr-card-comments-list" [ngClass]="{'dr-animation-comments': panelOpenState}" [ngStyle]="{'animation-duration': i/10+1.5+'s'}">
@@ -167,19 +167,147 @@
         </div>
     </mat-tab>
     <mat-tab label="Información">
-        <div class="dr-loading">
-            <div class="dr-small-box">
+        <div class="dr-post-body">
+            <div class="dr-post">
+                <div class="dr-publis-post mat-elevation-z4">
+                    <mat-toolbar color="dark-gray" class="dr-toolbar-activity">
+                        <span>Información General</span>
+                    </mat-toolbar>
+                    <mat-card-content>
+                        <div class="dr-div-abaut">
+                            <br><br>
+                            <a><strong>Nombre:</strong></a>&nbsp;<i class="fas fa-user-circle"></i>
+                            <br>
+                            <a>Jheysson David Roa Leon</a>
+                            <p><br></p>
+                            <a><strong>Cumplea&ntilde;os:</strong></a>&nbsp;<i class="fas fa-calendar-day"></i>
+                            <br>
+                            <a *ngIf="user != ''">Marzo 4, 1996.&nbsp;</a>
+                            <a *ngIf="user == ''" matTooltip="Disponible al iniciar sesión" [matTooltipDisabled]="user != ''" style="color: #727272;">No disponible.&nbsp;</a>
+                            <p><br></p>
+                            <a><strong>Locaci&oacute;n:</strong></a>&nbsp;<i class="fas fa-map-marker-alt"></i>
+                            <br>
+                            <a>Bogot&aacute; D.C</a>
+                            <p><br></p>
+                            <a><strong>Acerca de mi:</strong></a>&nbsp;<i class="fas fa-bookmark"></i>
+                            <br>
+                            <p style="margin-bottom: 0px; text-align: justify;">Estudiante de Ing. de Sistemas y Computaci&oacute;n, Excelente dominio y destreza en el &aacute;rea de Desarrollo de Software Full Stack y Devops aws.</p>
+                            <p style="text-align: justify;">Soy una persona &Iacute;ntegra con s&oacute;lidos principios morales y &eacute;ticos, en servicio al cliente, din&aacute;mica, creativa, con gran capacidad de trabajo en equipo, organizada con disponibilidad para el cambio.
+                                Excelentes relaciones personales, capacidad de liderazgo, puntualidad y responsabilidad contin&uacute;a sobre el cargo desempe&ntilde;ado, adaptabilidad y aprendizaje orientado al logro de resultados.</p>
+                            <p><br></p>
+                        </div>
+                    </mat-card-content>
+                </div>
+                <mat-divider class="dr-divider-30"></mat-divider>
+                <div class="dr-publis-post mat-elevation-z4">
+                    <mat-toolbar color="dark-gray" class="dr-toolbar-activity">
+                        <span>Contacto</span>
+                    </mat-toolbar>
+                    <mat-card-content>
+                        <div class="dr-div-abaut">
+                            <br><br>
+                            <a><strong>Direcci&oacute;n.</strong></a>&nbsp;<i class="fas fa-street-view"></i>
+                            <br>
+                            <a *ngIf="user != ''">Calle 186a N&ordm; 15a-15</a>
+                            <a *ngIf="user == ''" matTooltip="Disponible al iniciar sesión" [matTooltipDisabled]="user != ''" style="color: #727272;">No disponible.&nbsp;</a>
+                            <p><br></p>
+                            <a><strong>Tel.</strong></a>&nbsp;<i class="fas fa-mobile"></i>
+                            <br>
+                            <a *ngIf="user != ''"><span class="fr-emoticon fr-deletable fr-emoticon-img" style="background: url(https://cdnjs.cloudflare.com/ajax/libs/emojione/2.0.1/assets/svg/1f1e8-1f1f4.svg);">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;+57 3103352510</a>
+                            <a *ngIf="user == ''" matTooltip="Disponible al iniciar sesión" [matTooltipDisabled]="user != ''" style="color: #727272;">No disponible.&nbsp;</a>
+                            <p><br></p>
+                            <a><strong>Sitio Web.</strong></a>&nbsp;<i class="fab fa-sketch"></i>
+                            <br>
+                            <a href="https://david-roa.com"><span style="color: #a7a7a7">https://david-roa.com</span></a>
+                            <p><br></p>
+                            <a><strong>Emails.</strong></a>&nbsp;<i class="fas fa-mail-bulk"></i>
+                            <br>
+                            <a *ngIf="user != ''">-jroa52@uan.edu.co</a>
+                            <a *ngIf="user == ''" matTooltip="Disponible al iniciar sesión" [matTooltipDisabled]="user != ''" style="color: #727272;">No disponible.&nbsp;</a>
+                            <br>
+                            <a *ngIf="user != ''">-davidswat_763@hotmail.com</a>
+                            <a *ngIf="user == ''" matTooltip="Disponible al iniciar sesión" [matTooltipDisabled]="user != ''" style="color: #727272;">No disponible.&nbsp;</a>
+                            <p><br></p>
+                        </div>
+                    </mat-card-content>
+                </div>
+                <mat-divider class="dr-divider-30"></mat-divider>
+                <div class="dr-publis-post mat-elevation-z4">
+                    <mat-toolbar color="dark-gray" class="dr-toolbar-activity">
+                        <span>Trabajo</span>
+                    </mat-toolbar>
+                    <mat-card-content>
+                        <div class="dr-div-abaut">
+                            <br><br>
+                            <a><strong>Ocupaci&oacute;n.</strong></a>&nbsp;<i class="fas fa-street-view"></i>
+                            <br>
+                            <a>Developer</a>
+                            <p><br></p>
+                            <a><strong>Habilidades.</strong></a>&nbsp;<i class="fas fa-mobile"></i>
+                            <br>
+                            <a>Java, C#, NodeJs, Angular 8, JavaScript, HTML, CSS, Deevops (aws,fire-base), SQL y NoSQL, Unity.</a>
+                            <p><br></p>
+                            <a><strong>Trabajos.</strong></a>&nbsp;<i class="fas fa-mail-bulk"></i>
+                            <br>
+                            <a>-Proyecto Universidad Antonio Nariño &nbsp;<span style="color: #727272;">2016-Actualmente</span></a>
+                            <br>
+                            <a>-GrupoTX &nbsp;<span style="margin-left: 173px;color: #727272;">2017/04-2017/11</span></a>
+                            <br>
+                            <a>-Software Colombia &nbsp;<span style="margin-left: 109px;color: #727272;">2017-Actualmente</span></a>
+                            <p><br></p>
+                        </div>
+                    </mat-card-content>
+                </div>
+            </div>
+            <div class="dr-timeline-post">
+                <div class="dr-publis-post mat-elevation-z4">
+                    <mat-toolbar color="dark-gray" class="dr-toolbar-activity">
+                        <span>Proyectos Actuales</span>
+                    </mat-toolbar>
+                    <mat-nav-list class="dr-nav">
+                        <a href="https://prod.scmail.co" mat-list-item class="dr-icon-buzz-out">
+                            <h1 mat-line class="dr-user-post-public">SCMail2
+                                <span class="dr-post-public">Developer</span>
+                            </h1>
+                            <p mat-line>
+                                <span class="dr-subline">Software Colombia</span>
+                            </p>
+                            <img mat-list-avatar src="https://prod.scmail.co/assets/Logos/SCmailLogo.png" alt="">
+                        </a>
+
+                        <a href="http://www.uan.edu.co" mat-list-item class="dr-pulse-dark dr-icon-buzz-out">
+                            <h1 mat-line class="dr-user-post-public">Virtual Human
+                                <span class="dr-post-public">Analyst</span>
+                            </h1>
+                            <p mat-line>
+                                <span class="dr-subline">Universidad Antonio Nariño</span>
+                            </p>
+                            <img mat-list-avatar src="../../../assets/image/uan-logo.jpg" alt="">
+                        </a>
+
+                        <a href="https://david-roa.com" mat-list-item class="dr-icon-buzz-out">
+                            <h1 mat-line class="dr-user-post-public">DaVid Roa
+                                <span class="dr-post-public">Developer</span>
+                            </h1>
+                            <p mat-line>
+                                <span class="dr-subline">Website</span>
+                            </p>
+                            <img mat-list-avatar src="../../../assets/image/david-logo-circle.png" alt="">
+                        </a>
+                    </mat-nav-list>
+                </div>
                 <br>
-                <br>
-                <span class="back">
-            <span>L</span>
-                <span>o</span>
-                <span>a</span>
-                <span>d</span>
-                <span>i</span>
-                <span>n</span>
-                <span>g</span>
-                </span>
+                <div class="dr-publis-post mat-elevation-z4">
+                    <mat-toolbar color="dark-gray" class="dr-toolbar-activity">
+                        <span>Usuarios</span>
+                    </mat-toolbar>
+                    <mat-nav-list class="dr-nav">
+                        <a *ngIf="user == ''" matTooltip="Disponible al iniciar sesión" [matTooltipDisabled]="user != ''" style="color: #727272;">No disponible.&nbsp;</a>
+                        <div *ngIf="user != ''" class="dr-post-body" style="place-content: end">
+                            <img *ngFor="let us of users" matTooltip="{{us.key}}" class="dr-icon-user" src="{{us.login}}" alt="">
+                        </div>
+                    </mat-nav-list>
+                </div>
             </div>
         </div>
     </mat-tab>

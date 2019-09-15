@@ -123,7 +123,7 @@ h1.dr-app-name {
 
 .scrollbar {
     float: left;
-    height: 90%;
+    height: 89%;
     width: 100%;
     overflow-y: scroll;
 }
@@ -142,7 +142,7 @@ h1.dr-app-name {
 
 @media(min-width: 1400px) {
     .scrollbar {
-        height: 92%;
+        height: 94%;
     }
 }
 

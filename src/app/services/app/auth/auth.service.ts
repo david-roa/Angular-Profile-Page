@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { auth } from 'firebase/app'
+import { auth } from 'firebase/app';
 import { take } from 'rxjs/operators';
 
 @Injectable({
@@ -16,12 +16,12 @@ export class AuthService {
     return new Promise<string>((resolve, reject) => {
       this.af.auth.createUserWithEmailAndPassword(email, pass)
         .then((user) => {
-          user.user.sendEmailVerification().then((res) =>{
+          user.user.sendEmailVerification().then((res) => {
             resolve(user.user.uid);
-          })
-        }, err => reject(err))
-    })
-  };
+          });
+        }, err => reject(err));
+    });
+  }
 
   updateUser(photo: string, username: string) {
     return new Promise<string>((resolve, reject) => {
@@ -30,17 +30,17 @@ export class AuthService {
           user.updateProfile({
             displayName: username,
             photoURL: photo
-          }).then((user:any) => resolve(user), err => reject(err))
+          }).then((us: any) => resolve(us), err => reject(err));
         }
-      })
-    })
-  };
+      });
+    });
+  }
 
   loginEmailUser(email: string, pass: string) {
     return new Promise<string>((resolve, reject) => {
       this.af.auth.signInWithEmailAndPassword(email, pass)
-        .then((user:any) => resolve(user.user), err => reject(err))
-    })
+        .then((user: any) => resolve(user.user), err => reject(err));
+    });
   }
 
   logoutUser() {
@@ -51,13 +51,13 @@ export class AuthService {
     return new Promise(async (resolve, reject) => {
       const credential = await this.af.auth.signInWithPopup(new auth.GoogleAuthProvider());
       resolve(credential.user);
-    })
+    });
   }
 
   facebookSignin() {
     return new Promise(async (resolve, reject) => {
       const credential = await this.af.auth.signInWithPopup(new auth.FacebookAuthProvider());
       resolve(credential.user);
-    })
+    });
   }
 }

@@ -5,13 +5,14 @@ import { UploadFilePost } from './upload/file/upload-file.component';
 import { Comment } from 'src/app/model/profile/comment';
 import FroalaEditor from 'froala-editor';
 import { map } from 'rxjs/operators';
+import { User } from '../../model/app/user';
 import { Post } from '../../model/profile/post';
 import { Attached } from '../../model/profile/atteched';
 import { Image } from '../../model/profile/image';
 import { PostService } from '../../services/app/profile/post.service';
+import { TokenService } from '../../services/app/auth/token.service';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { take } from 'rxjs/operators';
-import { element } from 'protractor';
 
 
 @Component({
@@ -20,31 +21,29 @@ import { element } from 'protractor';
   styleUrls: ['./body.component.css'],
 })
 export class BodyComponent implements OnInit {
-  public options: Object = {}
+  public options = {};
   panelOpenState = false;
   file: File;
   postTemp: string;
-  limitFiles: boolean = false;
-  limitImg: boolean = false;
-  user: string = '';
+  limitFiles = false;
+  limitImg = false;
+  user = '';
   inTempPost: number = new Date().getTime();
   date: Date = new Date();
-  imgProfile: string = '../../../assets/image/user.gif';
-  viewFroala: boolean = true;
-  nameEditor: string = '';
-  commentTemp: string = '';
+  imgProfile = '../../../assets/image/user.gif';
+  viewFroala = true;
+  nameEditor = '';
+  commentTemp = '';
 
   public testListComments: Comment[] = [];
+  public users: User[] = [];
   public posts: Post[] = [];
   public images: Image[] = [];
   public attachments: Attached[] = [];
 
 
-  constructor(public dialog: MatDialog,
-    private ps: PostService,
-    private af: AngularFireAuth
-  ) {
-    this.file = new File(new Array<Blob>(), "Mock");
+  constructor(public dialog: MatDialog, private ps: PostService, private af: AngularFireAuth, private ts: TokenService) {
+    this.file = new File(new Array<Blob>(), 'Mock');
     this.initFroala();
     this.showFroala();
   }
@@ -62,9 +61,12 @@ export class BodyComponent implements OnInit {
     await this.ps.getPost().snapshotChanges().pipe(
       map(actions => actions.map(a => ({ key: a.payload.key, ...a.payload.val() })))
     ).subscribe(items => this.posts = items.reverse());
+    await this.ts.getUsers().snapshotChanges().pipe(
+      map(actions => actions.map(a => ({ key: a.payload.key, ...a.payload.val() })))
+    ).subscribe(items => this.users = items.reverse());
   }
 
-  openComments(){
+  openComments() {
     this.panelOpenState = !this.panelOpenState;
   }
 
@@ -118,6 +120,7 @@ export class BodyComponent implements OnInit {
     this.images = [];
     this.attachments = [];
     this.postTemp = null;
+    console.log(this.users)
   }
 
   createNewPost() {
@@ -195,8 +198,9 @@ export class BodyComponent implements OnInit {
   deleteAtt(url, index) {
     this.ps.deleteFileTemp(url);
     this.attachments.splice(index, 1)
-    if (this.attachments.length < 4)
+    if (this.attachments.length < 4) {
       this.limitFiles = false;
+    }
   }
 
   commentPost(val) {

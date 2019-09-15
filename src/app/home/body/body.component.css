@@ -338,6 +338,17 @@
     margin-top: 15px;
 }
 
+.dr-div-abaut {
+    margin: 20px;
+}
+
+.dr-icon-user {
+    width: 40px;
+    border-radius: 50%;
+    height: 40px;
+    margin: 5px 10px 5px 0;
+}
+
 
 /* Froala */
 
